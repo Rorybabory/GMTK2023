@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 using StateMachine;
+using GGUtil;
 
 public enum HitmanStates
 {
@@ -25,7 +26,12 @@ public class Hitman : MonoBehaviour
     public float ViewDistance = 25f;
     public LayerMask SightMask;
 
+    public float TurnLerp = 0.1f;
+
     [HideInInspector] public NavMeshAgent Agent;
+
+    public bool HasLOS { get; private set; }
+    public Vector2 PlayerDir { get; private set; }
 
     // ------------------- State Machine Stuff -------------------- //
     private FSM SM = new();
@@ -45,24 +51,37 @@ public class Hitman : MonoBehaviour
 
     void Update()
     {
+        CalculateStuff();
+        
         SM.Update();
     }
+
+    void CalculateStuff()
+    {
+        PlayerDir = (Target.position - transform.position).normalized;
+        HasLOS = CheckLOS();
+    }
+
 
     /// <summary>
     /// Check if the hitman can see the player
     /// </summary>
     /// <returns></returns>
     public bool CheckLOS()
-    {
-        var dir = (Target.position - transform.position).normalized;        
-        
-        if (Vector2.Angle(transform.up, dir) <= FOV / 2)
+    {        
+        if (Vector2.Angle(transform.up, PlayerDir) <= FOV / 2)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, ViewDistance, SightMask);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, PlayerDir, ViewDistance, SightMask);
             if (hit.transform == Target) return true;
         }
 
         return false;
+    }
+
+    public void LookAtPlayer()
+    {
+        Quaternion rot = GGMath.LookRotation2D(transform.position, (Vector2)transform.position - PlayerDir, 90); //desired rotation
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, TurnLerp * Time.deltaTime);
     }
 }
 
@@ -77,16 +96,15 @@ public class ChaseState : State
 
     public override void Update()
     {
-        if (hitman.CheckLOS())
+        if (hitman.HasLOS)
         {
             hitman.Agent.isStopped = false;
             hitman.Agent.SetDestination(hitman.Target.position);
-            
+            hitman.LookAtPlayer();
         }
         else
         {
             Debug.Log("Lost Sight");
-            //hitman.Agent.SetDestination(hitman.transform.position);
             hitman.Agent.isStopped = true;
         }
     }
