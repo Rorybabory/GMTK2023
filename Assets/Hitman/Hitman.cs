@@ -6,23 +6,29 @@ using UnityEngine.AI;
 
 using StateMachine;
 
-public enum HitmanState
+public enum HitmanStates
 {
     Wander,
     Search,
     Chase,
     Stab,
     Shoot,
-    Snipe    
+    Snipe
 }
+
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Hitman : MonoBehaviour
 {
     public Transform Target;
-    public HitmanState state = HitmanState.Chase;
+    public float FOV = 180;
+    public float ViewDistance = 25f;
+    public LayerMask SightMask;
 
-    private NavMeshAgent Agent;
+    [HideInInspector] public NavMeshAgent Agent;
+
+    // ------------------- State Machine Stuff -------------------- //
+    private FSM SM = new();
 
     // Start is called before the first frame update
     void Start()
@@ -30,64 +36,58 @@ public class Hitman : MonoBehaviour
         Agent = gameObject.GetComponent<NavMeshAgent>();
         Agent.updateRotation = false;
         Agent.updateUpAxis = false;
+
+        //initialize the state machine states
+        SM.AddState((int) HitmanStates.Chase, new ChaseState(this));
+
+        SM.SetCurrentState((int) HitmanStates.Chase);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        switch (state)
+        SM.Update();
+    }
+
+    /// <summary>
+    /// Check if the hitman can see the player
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckLOS()
+    {
+        var dir = (Target.position - transform.position).normalized;        
+        
+        if (Vector2.Angle(transform.up, dir) <= FOV / 2)
         {
-            case HitmanState.Wander:
-                Wander();
-                break;
-            case HitmanState.Search:
-                Search();
-                break;
-            case HitmanState.Chase:
-                Chase();
-                break;
-            case HitmanState.Stab:
-                Stab();
-                break;
-            case HitmanState.Shoot:
-                Shoot();
-                break;
-            case HitmanState.Snipe:
-                Snipe();
-                break;
-            default:
-                break;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, ViewDistance, SightMask);
+            if (hit.transform == Target) return true;
+        }
+
+        return false;
+    }
+}
+
+public class ChaseState : State
+{
+    protected Hitman hitman;
+
+    public ChaseState(Hitman hitman)
+    {
+        this.hitman = hitman;
+    }
+
+    public override void Update()
+    {
+        if (hitman.CheckLOS())
+        {
+            hitman.Agent.isStopped = false;
+            hitman.Agent.SetDestination(hitman.Target.position);
+            
+        }
+        else
+        {
+            Debug.Log("Lost Sight");
+            //hitman.Agent.SetDestination(hitman.transform.position);
+            hitman.Agent.isStopped = true;
         }
     }
-
-    void Wander()
-    {
-        throw new NotImplementedException();
-    }
-    
-    private void Search()
-    {
-        throw new NotImplementedException();
-    }
-    
-    private void Chase()
-    {
-        Agent.SetDestination(Target.position);
-    }
-
-    private void Stab()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void Shoot()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void Snipe()
-    {
-        throw new NotImplementedException();
-    }
-
 }

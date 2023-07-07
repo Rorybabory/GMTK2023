@@ -6,17 +6,20 @@ namespace StateMachine
 {
     public class FSM
     {
-        protected Dictionary<string, State> States;
+        protected Dictionary<int, State> States;
         protected State CurrentState;
 
-        public FSM() { }
+        public FSM() 
+        { 
+            States = new();
+        }
 
-        public void AddState(string key, State state)
+        public void AddState(int key, State state)
         {
             States.Add(key, state);
         }
 
-        public State GetState(string key)
+        public State GetState(int key)
         {
             return States[key];
         }
@@ -28,6 +31,11 @@ namespace StateMachine
             CurrentState = state;
 
             CurrentState?.Enter(); //enter the new state
+        }
+
+        public void SetCurrentState(int key)
+        {
+            SetCurrentState(GetState(key));
         }
 
         public void Update()
