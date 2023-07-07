@@ -11,7 +11,7 @@ public class PlayerMechanics : MonoBehaviour
     }
 
  
-    [SerializeField] private float moveSpeed;
+    private float moveSpeed;
     [SerializeField] private float walkSpeed = 2;
     [SerializeField] private float sprintSpeed = 5;
 
@@ -47,11 +47,11 @@ public class PlayerMechanics : MonoBehaviour
         
         if (bStartSprint)
         {
-            moveSpeed = SprintSpeed;
+            moveSpeed = sprintSpeed;
         }
         if (!bStartSprint)
         {
-            moveSpeed = WalkSpeed;
+            moveSpeed = walkSpeed;
         }
     }
 }
