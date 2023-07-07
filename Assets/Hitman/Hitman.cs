@@ -32,8 +32,10 @@ public class Hitman : MonoBehaviour
     public Vector2 PlayerDir { get; private set; }
     [HideInInspector] public Vector2 LastPlayerPos;
 
+    Vector2 nzAgentVelocity = Vector2.one; //non-zero agent velocity, the 
+
     // ------------------- State Machine Stuff -------------------- //
-    [HideInInspector] public FSM SM = new();
+    [HideInInspector] public FSM<HitmanStates> SM = new();
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +45,10 @@ public class Hitman : MonoBehaviour
         Agent.updateUpAxis = false;
 
         //initialize the state machine states
-        SM.AddState((int) HitmanStates.Chase, new ChaseState(this));
+        SM.AddState(HitmanStates.Search, new SearchState(this));
+        SM.AddState(HitmanStates.Chase, new ChaseState(this));
 
-        SM.SetCurrentState((int) HitmanStates.Chase);
+        SM.SetCurrentState(HitmanStates.Chase);
     }
 
     void Update()
@@ -60,6 +63,10 @@ public class Hitman : MonoBehaviour
         PlayerDir = (Target.position - transform.position).normalized;
         HasLOS = CheckLOS();
         if(HasLOS) LastPlayerPos = Target.position;
+
+        //This section stores the non-zero velocity
+        if (Agent.velocity.sqrMagnitude > 0.01) nzAgentVelocity = Agent.velocity;
+        else if (Agent.velocity.sqrMagnitude > 0.005) nzAgentVelocity = Agent.velocity.normalized * 0.01f;
     }
 
     /// <summary>
@@ -77,10 +84,16 @@ public class Hitman : MonoBehaviour
         return false;
     }
 
-    public void LookAtPlayer()
+    public void LookAtPosition(Vector2 Position)
     {
-        Quaternion rot = GGMath.LookRotation2D(transform.position, (Vector2)transform.position - PlayerDir, 90); //desired rotation
+        Quaternion rot = GGMath.LookRotation2D(transform.position, (Vector2)transform.position - (Position - (Vector2)transform.position).normalized, 90); //desired rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, rot, TurnLerp * Time.deltaTime);
+    }
+
+    
+    public void LookMovementDir()
+    {
+        LookAtPosition((Vector2)transform.position + nzAgentVelocity.normalized);
     }
 }
 
@@ -96,6 +109,14 @@ public class SearchState : State
     public override void Enter()
     {
         Debug.Log("Enter Search State");
+        hitman.Agent.isStopped = false;
+        hitman.Agent.SetDestination(hitman.LastPlayerPos); //move to the last known position
+    }
+
+    public override void Update()
+    {
+        hitman.LookMovementDir();
+        if (hitman.HasLOS) hitman.SM.SetCurrentState(HitmanStates.Chase);
     }
 }
 
@@ -117,12 +138,11 @@ public class ChaseState : State
     {
         if (!hitman.HasLOS) //if can't see the player then search for him
         {
-            hitman.Agent.isStopped = true;
-            hitman.SM.SetCurrentState((int)HitmanStates.Search);
+            hitman.SM.SetCurrentState(HitmanStates.Search);
             return;
         }
 
         hitman.Agent.SetDestination(hitman.Target.position);
-        hitman.LookAtPlayer();
+        hitman.LookAtPosition(hitman.Target.position);
     }
 }
