@@ -9,14 +9,12 @@ using GGUtil;
 
 public enum HitmanStates
 {
-    Wander,
     Search,
     Chase,
     Stab,
     Shoot,
     Snipe
 }
-
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Hitman : MonoBehaviour
@@ -26,15 +24,16 @@ public class Hitman : MonoBehaviour
     public float ViewDistance = 25f;
     public LayerMask SightMask;
 
-    public float TurnLerp = 0.1f;
+    public float TurnLerp = 4;
 
     [HideInInspector] public NavMeshAgent Agent;
 
     public bool HasLOS { get; private set; }
     public Vector2 PlayerDir { get; private set; }
+    [HideInInspector] public Vector2 LastPlayerPos;
 
     // ------------------- State Machine Stuff -------------------- //
-    private FSM SM = new();
+    [HideInInspector] public FSM SM = new();
 
     // Start is called before the first frame update
     void Start()
@@ -60,8 +59,8 @@ public class Hitman : MonoBehaviour
     {
         PlayerDir = (Target.position - transform.position).normalized;
         HasLOS = CheckLOS();
+        if(HasLOS) LastPlayerPos = Target.position;
     }
-
 
     /// <summary>
     /// Check if the hitman can see the player
@@ -85,6 +84,21 @@ public class Hitman : MonoBehaviour
     }
 }
 
+public class SearchState : State
+{
+    protected Hitman hitman;
+    
+    public SearchState(Hitman hitman)
+    {
+        this.hitman = hitman;
+    }
+
+    public override void Enter()
+    {
+        Debug.Log("Enter Search State");
+    }
+}
+
 public class ChaseState : State
 {
     protected Hitman hitman;
@@ -94,18 +108,21 @@ public class ChaseState : State
         this.hitman = hitman;
     }
 
+    public override void Enter()
+    {
+        hitman.Agent.isStopped = false;
+    }
+
     public override void Update()
     {
-        if (hitman.HasLOS)
+        if (!hitman.HasLOS) //if can't see the player then search for him
         {
-            hitman.Agent.isStopped = false;
-            hitman.Agent.SetDestination(hitman.Target.position);
-            hitman.LookAtPlayer();
-        }
-        else
-        {
-            Debug.Log("Lost Sight");
             hitman.Agent.isStopped = true;
+            hitman.SM.SetCurrentState((int)HitmanStates.Search);
+            return;
         }
+
+        hitman.Agent.SetDestination(hitman.Target.position);
+        hitman.LookAtPlayer();
     }
 }
