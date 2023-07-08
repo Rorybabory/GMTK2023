@@ -5,17 +5,16 @@ using UnityEngine;
 using UnityEngine.AI;
 
 using StateMachine;
+using GGUtil;
 
 public enum HitmanStates
 {
-    Wander,
     Search,
     Chase,
     Stab,
     Shoot,
     Snipe
 }
-
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Hitman : MonoBehaviour
@@ -25,10 +24,18 @@ public class Hitman : MonoBehaviour
     public float ViewDistance = 25f;
     public LayerMask SightMask;
 
+    public float TurnLerp = 4;
+
     [HideInInspector] public NavMeshAgent Agent;
 
+    public bool HasLOS { get; private set; }
+    public Vector2 PlayerDir { get; private set; }
+    [HideInInspector] public Vector2 LastPlayerPos;
+
+    Vector2 nzAgentVelocity = Vector2.one; //non-zero agent velocity, the 
+
     // ------------------- State Machine Stuff -------------------- //
-    private FSM SM = new();
+    [HideInInspector] public FSM<HitmanStates> SM = new();
 
     // Start is called before the first frame update
     void Start()
@@ -38,14 +45,28 @@ public class Hitman : MonoBehaviour
         Agent.updateUpAxis = false;
 
         //initialize the state machine states
-        SM.AddState((int) HitmanStates.Chase, new ChaseState(this));
+        SM.AddState(HitmanStates.Search, new SearchState(this));
+        SM.AddState(HitmanStates.Chase, new ChaseState(this));
 
-        SM.SetCurrentState((int) HitmanStates.Chase);
+        SM.SetCurrentState(HitmanStates.Chase);
     }
 
     void Update()
     {
+        CalculateStuff();
+        
         SM.Update();
+    }
+
+    void CalculateStuff()
+    {
+        PlayerDir = (Target.position - transform.position).normalized;
+        HasLOS = CheckLOS();
+        if(HasLOS) LastPlayerPos = Target.position;
+
+        //This section stores the non-zero velocity
+        if (Agent.velocity.sqrMagnitude > 0.01) nzAgentVelocity = Agent.velocity;
+        else if (Agent.velocity.sqrMagnitude > 0.005) nzAgentVelocity = Agent.velocity.normalized * 0.01f;
     }
 
     /// <summary>
@@ -53,16 +74,49 @@ public class Hitman : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public bool CheckLOS()
-    {
-        var dir = (Target.position - transform.position).normalized;        
-        
-        if (Vector2.Angle(transform.up, dir) <= FOV / 2)
+    {        
+        if (Vector2.Angle(transform.up, PlayerDir) <= FOV / 2)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, ViewDistance, SightMask);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, PlayerDir, ViewDistance, SightMask);
             if (hit.transform == Target) return true;
         }
 
         return false;
+    }
+
+    public void LookAtPosition(Vector2 Position)
+    {
+        Quaternion rot = GGMath.LookRotation2D(transform.position, (Vector2)transform.position - (Position - (Vector2)transform.position).normalized, 90); //desired rotation
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, TurnLerp * Time.deltaTime);
+    }
+
+    
+    public void LookMovementDir()
+    {
+        LookAtPosition((Vector2)transform.position + nzAgentVelocity.normalized);
+    }
+}
+
+public class SearchState : State
+{
+    protected Hitman hitman;
+    
+    public SearchState(Hitman hitman)
+    {
+        this.hitman = hitman;
+    }
+
+    public override void Enter()
+    {
+        Debug.Log("Enter Search State");
+        hitman.Agent.isStopped = false;
+        hitman.Agent.SetDestination(hitman.LastPlayerPos); //move to the last known position
+    }
+
+    public override void Update()
+    {
+        hitman.LookMovementDir();
+        if (hitman.HasLOS) hitman.SM.SetCurrentState(HitmanStates.Chase);
     }
 }
 
@@ -75,19 +129,20 @@ public class ChaseState : State
         this.hitman = hitman;
     }
 
+    public override void Enter()
+    {
+        hitman.Agent.isStopped = false;
+    }
+
     public override void Update()
     {
-        if (hitman.CheckLOS())
+        if (!hitman.HasLOS) //if can't see the player then search for him
         {
-            hitman.Agent.isStopped = false;
-            hitman.Agent.SetDestination(hitman.Target.position);
-            
+            hitman.SM.SetCurrentState(HitmanStates.Search);
+            return;
         }
-        else
-        {
-            Debug.Log("Lost Sight");
-            //hitman.Agent.SetDestination(hitman.transform.position);
-            hitman.Agent.isStopped = true;
-        }
+
+        hitman.Agent.SetDestination(hitman.Target.position);
+        hitman.LookAtPosition(hitman.Target.position);
     }
 }
