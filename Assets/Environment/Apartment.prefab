@@ -198,13 +198,8 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 298718030, guid: ca8abcbe88e194e06b0334740414cf11, type: 3}
-<<<<<<< Updated upstream
   - m_RefCount: 1
     m_Data: {fileID: -17313587, guid: ca8abcbe88e194e06b0334740414cf11, type: 3}
-=======
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
->>>>>>> Stashed changes
   - m_RefCount: 1
     m_Data: {fileID: -1476325165, guid: ca8abcbe88e194e06b0334740414cf11, type: 3}
   - m_RefCount: 1
@@ -332,11 +327,7 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
-<<<<<<< Updated upstream
 --- !u!114 &9034954070244078302
-=======
---- !u!114 &2696685687960654914
->>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
