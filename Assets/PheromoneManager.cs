@@ -20,7 +20,7 @@ public class PheromoneManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         CreatePheromone(Player.transform.position, Instance.FootstepPheromone);
     }
