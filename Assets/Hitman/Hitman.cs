@@ -28,6 +28,8 @@ public class Hitman : MonoBehaviour
 
     public float TurnLerp = 4;
 
+    [Header("Readonly Stuff")]
+
     [HideInInspector] public NavMeshAgent Agent;
 
     public bool HasLOS { get; private set; }
@@ -35,7 +37,8 @@ public class Hitman : MonoBehaviour
     [HideInInspector] public Vector2 LastPlayerPos;
 
     Vector2 nzAgentVelocity = Vector2.one; //non-zero agent velocity, the 
-    Vector2 pheromoneAverage = Vector2.zero;
+    public Vector2 pheromoneAverage = Vector2.zero;
+    public float PheromoneStrengthAverage = 0;
 
     // ------------------- State Machine Stuff -------------------- //
     [HideInInspector] public FSM<HitmanStates> SM = new();
@@ -124,12 +127,15 @@ public class Hitman : MonoBehaviour
         }
 
         pheromoneAverage = average;
+        PheromoneStrengthAverage = totalStrength / PheromoneManager.Instance.Pheromones.Count;
     }
 
+    [Tooltip("How much should the opacity of the Pheromone average gizmo be multiplied by.")]
+    public float pheromoneAverageStrengthOpacityModifier = 0.1f;
     private void OnDrawGizmos()
-    {
-        EvaluatePheromoneAverage();
-        Gizmos.color = Color.red;
+    {   
+        if(Application.isPlaying) EvaluatePheromoneAverage();
+        Gizmos.color = new(1, 0, 0, pheromoneAverageStrengthOpacityModifier * PheromoneStrengthAverage);
         Gizmos.DrawSphere(pheromoneAverage, 0.5f);
     }
 }
@@ -154,7 +160,8 @@ public class SearchState : State
     {
         hitman.EvaluatePheromoneAverage();
         hitman.LookMovementDir();
-        
+        hitman.Agent.SetDestination(hitman.pheromoneAverage);
+
         if (hitman.HasLOS) hitman.SM.SetCurrentState(HitmanStates.Chase);
     }
 }
