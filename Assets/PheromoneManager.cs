@@ -22,7 +22,7 @@ public class PheromoneManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CreatePheromone(Player.transform.position, Instance.FootstepPheromone);
+        CreatePheromone(Player.transform.position, PlayerTrailPheromone);
     }
 
     public static Pheromone CreatePheromone(Vector2 Position, float strength, float range, float duration, AnimationCurve falloff = null)
