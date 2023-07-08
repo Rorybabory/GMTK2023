@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerAnimation : MonoBehaviour {
 
@@ -8,7 +9,6 @@ public class PlayerAnimation : MonoBehaviour {
     [SerializeField] private SoundEffect stepSound;
 
     private Animator animator;
-    private SpriteRenderer rend;
     private Rigidbody2D rb;
 
     private float walkSpeed = 2, sprintSpeed = 5;
@@ -26,7 +26,6 @@ public class PlayerAnimation : MonoBehaviour {
     private void Awake() {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        rend = GetComponent<SpriteRenderer>();
     }
 
     private void Start() {
