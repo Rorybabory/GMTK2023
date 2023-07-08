@@ -15,6 +15,9 @@ public class Pheromone : MonoBehaviour
     public LayerMask BlockingMask;
     public float ObscurityDampening = 0.5f;
 
+    public bool Suspicion = true;
+    public float SuspicionAmount = 5;
+
     [Header("Read-Only")]
     [Tooltip("The strength that the hitman actually reads.")]
     public float strength;
@@ -26,6 +29,7 @@ public class Pheromone : MonoBehaviour
     {
         fadeSpeed = m_Strength / Duration;
         PheromoneManager.Instance.Pheromones.Add(this);
+        if(Suspicion) SuspicionManager.Instance.AddSusWorld(transform.position.x, transform.position.y, SuspicionAmount); //add suspicion impulse
     }
 
     // Using fixed update because it should have consistent deltaTime
