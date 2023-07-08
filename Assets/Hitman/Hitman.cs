@@ -158,6 +158,7 @@ public class RoamState : State
     public override void Enter()
     {
         Debug.Log("Entered Roaming State");
+        hitman.Agent.isStopped = true;
     }
 
     public override void Exit()

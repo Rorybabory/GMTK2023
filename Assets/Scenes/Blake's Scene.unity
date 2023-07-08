@@ -217,7 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 982773865}
   Pheromones: []
-  FootstepPheromone: {fileID: 4469000438530472423, guid: 260a468f712594d4784492749c332567, type: 3}
+  FootstepPheromone: {fileID: 4469000438530472423, guid: 6630ed022822de34ea83b41fa0775576, type: 3}
   PlayerTrailPheromone: {fileID: 4469000438530472423, guid: 260a468f712594d4784492749c332567, type: 3}
   ExitChasePheromones: {fileID: 12358578102962639, guid: 09d6df3c5cb62dc4bb5d038d06044407, type: 3}
 --- !u!1 &474832169
@@ -4085,7 +4085,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
 --- !u!1 &1050092622
 GameObject:
@@ -13060,7 +13060,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 72
   TurnLerp: 4
-  MinPheromoneLevel: 0.15
+  MinPheromoneLevel: 0.1
   Agent: {fileID: 0}
   LastPlayerPos: {x: 0, y: 0}
   pheromoneTarget: {x: 0, y: 0}
