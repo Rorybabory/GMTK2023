@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace StateMachine
 {
-    public class FSM
+    public class FSM <KeyType>
     {
-        protected Dictionary<int, State> States;
+        protected Dictionary<KeyType, State> States;
         protected State CurrentState;
 
         public FSM() 
@@ -14,12 +14,12 @@ namespace StateMachine
             States = new();
         }
 
-        public void AddState(int key, State state)
+        public void AddState(KeyType key, State state)
         {
             States.Add(key, state);
         }
 
-        public State GetState(int key)
+        public State GetState(KeyType key)
         {
             return States[key];
         }
@@ -33,7 +33,7 @@ namespace StateMachine
             CurrentState?.Enter(); //enter the new state
         }
 
-        public void SetCurrentState(int key)
+        public void SetCurrentState(KeyType key)
         {
             SetCurrentState(GetState(key));
         }
