@@ -27,6 +27,8 @@ public class Hitman : MonoBehaviour
     public float ViewDistance = 25f;
     public LayerMask SightMask;
 
+    public float WalkSpeed = 3;
+    public float SprintSpeed = 5;
     public float TurnLerp = 4;
 
     [Tooltip("Lowest strength for a pheromone to be attractive")]

@@ -10060,11 +10060,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4866979651115466170, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: diffuse
-      value: 0.1
+      value: 0.478
       objectReference: {fileID: 0}
     - target: {fileID: 4866979651115466170, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: DrawSusMap
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4866979651115466170, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: SearchAreas
@@ -10072,7 +10072,11 @@ PrefabInstance:
       objectReference: {fileID: 1292374030}
     - target: {fileID: 4866979651115466170, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: evaporation
-      value: 0.001
+      value: 0.026
+      objectReference: {fileID: 0}
+    - target: {fileID: 4866979651115466170, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: percentageEvaporation
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4866979651115466171, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: Player
