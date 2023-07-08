@@ -77,6 +77,11 @@ public class Hitman : MonoBehaviour
         SM.Update();
     }
 
+    private void FixedUpdate()
+    {
+        SM.FixedUpdate();
+    }
+
     void CalculateStuff()
     {
         PlayerDir = (Target.position - transform.position).normalized;
@@ -161,6 +166,15 @@ public class RoamState : State
         hitman.Agent.isStopped = true;
     }
 
+    public override void Update()
+    {
+        if (hitman.HasLOS)
+        {
+            hitman.SM.SetCurrentState(HitmanStates.Chase);
+            return;
+        }
+    }
+
     public override void Exit()
     {
         Debug.Log("Exited Roaming State");
@@ -187,8 +201,7 @@ public class SearchState : State
     {
         hitman.EvaluatePheromoneAverage();
         hitman.LookMovementDir();
-        hitman.Agent.SetDestination(hitman.pheromoneTarget);
-
+        
         if (hitman.HasLOS) 
         { 
             hitman.SM.SetCurrentState(HitmanStates.Chase);
@@ -199,6 +212,10 @@ public class SearchState : State
         {
             hitman.SM.SetCurrentState(HitmanStates.Roam);
             return;
+        }
+        else //if the pheromone strength is valid
+        {
+            hitman.Agent.SetDestination(hitman.pheromoneTarget);
         }
     }
 

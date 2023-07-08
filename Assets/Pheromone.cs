@@ -24,7 +24,6 @@ public class Pheromone : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        strength = m_Strength;
         fadeSpeed = m_Strength / Duration;
         PheromoneManager.Instance.Pheromones.Add(this);
     }

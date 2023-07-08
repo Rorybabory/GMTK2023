@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: Player Trail Pheromone
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f8a5c4157d61747a306302be38d4a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Strength: 10
-  Range: 5
+  m_Strength: 4
+  Range: 7
   Falloff:
     serializedVersion: 2
     m_Curve:
@@ -53,26 +53,35 @@ MonoBehaviour:
       time: 0
       value: 1
       inSlope: 0
-      outSlope: -1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -1
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.49999848
+      value: 0.49999464
+      inSlope: -2.3181174
+      outSlope: -2.3181174
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.27500215
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.4375
+      outSlope: -1.4375
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3265314
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Duration: 1
+  Duration: 5
   BlockingMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   ObscurityDampening: 0.5
   strength: 0
