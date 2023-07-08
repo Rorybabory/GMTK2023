@@ -10064,7 +10064,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4866979651115466170, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: DrawSusMap
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4866979651115466170, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: SearchAreas

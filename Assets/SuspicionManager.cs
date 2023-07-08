@@ -10,10 +10,14 @@ public class SuspicionManager : MonoBehaviour
     public Tilemap SearchAreas;
 
     [Tooltip("How much percent of the suspicion each cell should give to it's neighbors every tick.")]
+    [Range(0f, 1f)]
     public float diffuse = 0.05f;
     [Tooltip("How much suspicion should each cell lose every tick.")]
+    [Range(0, 1)]
     public float evaporation = 0.01f;
+    public bool percentageEvaporation = false;
 
+    [Header("Gizmos")]
     public bool DrawSusMap = false;
     public Color GizmoSusColor = Color.black;
     public float GizmoOpacityMultiplier = 0.5f;
@@ -67,7 +71,7 @@ public class SuspicionManager : MonoBehaviour
                 {
                     //step one is to diffuse to neighbors
                     //calculate diffuse amount
-                    float amnt = SusMap[x, y].Value * diffuse;
+                    float amnt = SusMap[x, y].Value * diffuse / 4;
 
                     void DoDiffuse(int _x, int _y) //diffuse the value to another cell relative to this one.
                     {
@@ -84,7 +88,15 @@ public class SuspicionManager : MonoBehaviour
                     DoDiffuse(0, -1);
                     
                     //Step two is to evaporate
-                    SusMap[x, y] -= evaporation;
+                    if (percentageEvaporation)
+                    {
+                        SusMap[x, y] *= 1 - evaporation;
+                    }
+                    else
+                    {
+                        SusMap[x, y] -= evaporation;
+                    }
+                    
 
                     if (SusMap[x, y] < 0) SusMap[x, y] = 0;
                 }
@@ -103,7 +115,7 @@ public class SuspicionManager : MonoBehaviour
     public Vector2Int WorldToSusMap(Vector2 position)
     {
         //var tilemapPos = SearchAreas.WorldToCell(position);
-        return new Vector2Int((int)position.x + (int)Mathf.Round(SearchAreas.localBounds.extents.x -0.5f), (int)position.y + (int)Mathf.Round(SearchAreas.localBounds.extents.y -0.5f));
+        return new Vector2Int((int)Mathf.Round(position.x + SearchAreas.localBounds.extents.x), (int)Mathf.Round(position.y + SearchAreas.localBounds.extents.y - 0.5f));
     }
 
     public void AddSus(int x, int y, float amount)
