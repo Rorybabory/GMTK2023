@@ -85,5 +85,5 @@ MonoBehaviour:
     m_Bits: 64
   ObscurityDampening: 0.5
   Suspicion: 1
-  SuspicionAmount: 0.2
+  SuspicionAmount: 2.83
   strength: 0

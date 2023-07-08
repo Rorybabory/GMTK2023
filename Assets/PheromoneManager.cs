@@ -28,7 +28,8 @@ public class PheromoneManager : MonoBehaviour
     public static Pheromone CreatePheromone(Vector2 Position, float strength, float range, float duration, AnimationCurve falloff = null)
     {
         if (falloff == null) falloff = AnimationCurve.Linear(0, 1, 1, 0);
-        var pheromone = Instantiate(new Pheromone(), Position, Quaternion.identity);
+        var obj = Instantiate(new GameObject(), Position, Quaternion.identity);
+        var pheromone = obj.AddComponent<Pheromone>();
         pheromone.m_Strength = strength;
         pheromone.Range = range;
         pheromone.Duration = duration;
