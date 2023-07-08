@@ -107,16 +107,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: 2, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 16
-      m_TileSpriteIndex: 12
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 1
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741826
   - first: {x: 0, y: 0, z: 0}
     second:
       serializedVersion: 2
@@ -181,8 +171,8 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: d2a744105e0184f54adee2976e86887c, type: 2}
-  - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: 247ba478b77c14e8894ab66b2e5549ad, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -208,8 +198,13 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 298718030, guid: ca8abcbe88e194e06b0334740414cf11, type: 3}
+<<<<<<< Updated upstream
   - m_RefCount: 1
     m_Data: {fileID: -17313587, guid: ca8abcbe88e194e06b0334740414cf11, type: 3}
+=======
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+>>>>>>> Stashed changes
   - m_RefCount: 1
     m_Data: {fileID: -1476325165, guid: ca8abcbe88e194e06b0334740414cf11, type: 3}
   - m_RefCount: 1
@@ -219,7 +214,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 50037639, guid: ca8abcbe88e194e06b0334740414cf11, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 6
+  - m_RefCount: 5
     m_Data:
       e00: 1
       e01: 0
@@ -240,7 +235,7 @@ Tilemap:
   m_TileColorArray:
   - m_RefCount: 0
     m_Data: {r: 0.8415102, g: 0.5607019, b: 0.5828055, a: 1}
-  - m_RefCount: 6
+  - m_RefCount: 5
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
     m_Data: {r: 0.99104345, g: 0.65054697, b: 0.704407, a: 1}
@@ -337,7 +332,11 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+<<<<<<< Updated upstream
 --- !u!114 &9034954070244078302
+=======
+--- !u!114 &2696685687960654914
+>>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
