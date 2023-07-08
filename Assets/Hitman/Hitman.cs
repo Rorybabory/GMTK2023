@@ -9,6 +9,7 @@ using GGUtil;
 
 public enum HitmanStates
 {
+    Roam,
     Search,
     Chase,
     Stab,
@@ -28,6 +29,10 @@ public class Hitman : MonoBehaviour
 
     public float TurnLerp = 4;
 
+    [Tooltip("Lowest strength for a pheromone to be attractive")]
+    public float MinPheromoneLevel = 0.15f;
+
+
     [Header("Readonly Stuff")]
 
     [HideInInspector] public NavMeshAgent Agent;
@@ -37,8 +42,8 @@ public class Hitman : MonoBehaviour
     [HideInInspector] public Vector2 LastPlayerPos;
 
     Vector2 nzAgentVelocity = Vector2.one; //non-zero agent velocity, the 
-    public Vector2 pheromoneAverage = Vector2.zero;
-    public float PheromoneStrengthAverage = 0;
+    public Vector2 pheromoneTarget = Vector2.zero;
+    public float AveragePheromoneStrength = 0;
 
     // ------------------- State Machine Stuff -------------------- //
     [HideInInspector] public FSM<HitmanStates> SM = new();
@@ -58,6 +63,7 @@ public class Hitman : MonoBehaviour
         Agent.updateUpAxis = false;
 
         //initialize the state machine states
+        SM.AddState(HitmanStates.Roam, new RoamState(this));
         SM.AddState(HitmanStates.Search, new SearchState(this));
         SM.AddState(HitmanStates.Chase, new ChaseState(this));
 
@@ -68,8 +74,6 @@ public class Hitman : MonoBehaviour
     {
         CalculateStuff();
 
-        PheromoneManager.CreatePheromone(Target.transform.position, PheromoneManager.Instance.FootstepPheromone);
-        
         SM.Update();
     }
 
@@ -104,7 +108,6 @@ public class Hitman : MonoBehaviour
         Quaternion rot = GGMath.LookRotation2D(transform.position, (Vector2)transform.position - (Position - (Vector2)transform.position).normalized, 90); //desired rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, rot, TurnLerp * Time.deltaTime);
     }
-
     
     public void LookMovementDir()
     {
@@ -126,8 +129,11 @@ public class Hitman : MonoBehaviour
             average += (Vector2) attractor.transform.position * attractor.strength / totalStrength;
         }
 
-        pheromoneAverage = average;
-        PheromoneStrengthAverage = totalStrength / PheromoneManager.Instance.Pheromones.Count;
+        if(totalStrength > 0) //prevent NaN
+            AveragePheromoneStrength = totalStrength / PheromoneManager.Instance.Pheromones.Count;
+
+        if (AveragePheromoneStrength >= MinPheromoneLevel) 
+            pheromoneTarget = average; //only update the pheromone average if the pheromones are strong enough. This means that the last major location remains the target.
     }
 
     [Tooltip("How much should the opacity of the Pheromone average gizmo be multiplied by.")]
@@ -135,8 +141,28 @@ public class Hitman : MonoBehaviour
     private void OnDrawGizmos()
     {   
         if(Application.isPlaying) EvaluatePheromoneAverage();
-        Gizmos.color = new(1, 0, 0, pheromoneAverageStrengthOpacityModifier * PheromoneStrengthAverage);
-        Gizmos.DrawSphere(pheromoneAverage, 0.5f);
+        Gizmos.color = new(1, 0, 0, pheromoneAverageStrengthOpacityModifier * AveragePheromoneStrength);
+        Gizmos.DrawSphere(pheromoneTarget, 0.5f);
+    }
+}
+
+public class RoamState : State
+{
+    protected Hitman hitman;
+
+    public RoamState(Hitman hitman)
+    {
+        this.hitman = hitman;
+    }
+
+    public override void Enter()
+    {
+        Debug.Log("Entered Roaming State");
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Exited Roaming State");
     }
 }
 
@@ -151,7 +177,7 @@ public class SearchState : State
 
     public override void Enter()
     {
-        Debug.Log("Enter Search State");
+        Debug.Log("Entered Search State");
         hitman.Agent.isStopped = false;
         //hitman.Agent.SetDestination(hitman.LastPlayerPos); //move to the last known position
     }
@@ -160,9 +186,24 @@ public class SearchState : State
     {
         hitman.EvaluatePheromoneAverage();
         hitman.LookMovementDir();
-        hitman.Agent.SetDestination(hitman.pheromoneAverage);
+        hitman.Agent.SetDestination(hitman.pheromoneTarget);
 
-        if (hitman.HasLOS) hitman.SM.SetCurrentState(HitmanStates.Chase);
+        if (hitman.HasLOS) 
+        { 
+            hitman.SM.SetCurrentState(HitmanStates.Chase);
+            return;
+        }
+
+        if (hitman.AveragePheromoneStrength < hitman.MinPheromoneLevel)
+        {
+            hitman.SM.SetCurrentState(HitmanStates.Roam);
+            return;
+        }
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Exited Search State");
     }
 }
 
@@ -177,6 +218,7 @@ public class ChaseState : State
 
     public override void Enter()
     {
+        Debug.Log("Entered Chase State");
         hitman.Agent.isStopped = false;
     }
 
@@ -194,6 +236,7 @@ public class ChaseState : State
 
     public override void Exit()
     {
+        Debug.Log("Exited Chase State");
         PheromoneManager.CreatePheromone(hitman.Target.position, PheromoneManager.Instance.ExitChasePheromones); //create strong pheromones where the player last was
     }
 }

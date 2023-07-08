@@ -5,15 +5,24 @@ using UnityEngine;
 public class PheromoneManager : MonoBehaviour
 {
     public static PheromoneManager Instance;
+    
+    public PlayerMechanics Player;
+
     public List<Pheromone> Pheromones = new();
 
     public Pheromone FootstepPheromone;
+    public Pheromone PlayerTrailPheromone;
     public Pheromone ExitChasePheromones;
 
     void Awake()
     {
         if (Instance != null) Debug.LogError("Only one pheromone manager is allowed.");
         Instance = this;
+    }
+
+    private void Update()
+    {
+        CreatePheromone(Player.transform.position, Instance.FootstepPheromone);
     }
 
     public static Pheromone CreatePheromone(Vector2 Position, float strength, float range, float duration, AnimationCurve falloff = null)
