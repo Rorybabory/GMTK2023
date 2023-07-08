@@ -43,11 +43,7 @@ public class Pheromone : MonoBehaviour
         RaycastHit2D hit = Physics2D.Linecast(transform.position, Hitman.Instance.transform.position, BlockingMask);
         if (hit.transform != null) strength *= ObscurityDampening; //lower the intensity of the pheromones if they are behind a wall
 
-
         Duration -= Time.fixedDeltaTime;
-
-
-
     }
 
     private void Update()
