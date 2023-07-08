@@ -19,6 +19,8 @@ public enum HitmanStates
 [RequireComponent(typeof(NavMeshAgent))]
 public class Hitman : MonoBehaviour
 {
+    public static Hitman Instance;
+
     public Transform Target;
     public float FOV = 180;
     public float ViewDistance = 25f;
@@ -33,13 +35,21 @@ public class Hitman : MonoBehaviour
     [HideInInspector] public Vector2 LastPlayerPos;
 
     Vector2 nzAgentVelocity = Vector2.one; //non-zero agent velocity, the 
+    Vector2 pheromoneAverage = Vector2.zero;
 
     // ------------------- State Machine Stuff -------------------- //
     [HideInInspector] public FSM<HitmanStates> SM = new();
 
+    private void Awake()
+    {
+        if (Instance != null) Debug.LogError("Cannot have multiple hitmen in the scene (This is intentional)");
+        Instance = this; //this has to be in awake so that it can be used in start by other objects
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+
         Agent = gameObject.GetComponent<NavMeshAgent>();
         Agent.updateRotation = false;
         Agent.updateUpAxis = false;
@@ -54,6 +64,8 @@ public class Hitman : MonoBehaviour
     void Update()
     {
         CalculateStuff();
+
+        PheromoneManager.CreatePheromone(Target.transform.position, PheromoneManager.Instance.FootstepPheromone);
         
         SM.Update();
     }
@@ -95,6 +107,31 @@ public class Hitman : MonoBehaviour
     {
         LookAtPosition((Vector2)transform.position + nzAgentVelocity.normalized);
     }
+
+    public void EvaluatePheromoneAverage()
+    {
+        Vector2 average = Vector2.zero;
+        float totalStrength = 0;
+
+        foreach (Pheromone attractor in PheromoneManager.Instance.Pheromones) //get the total amount of pheromone in the scene
+        {
+            totalStrength += attractor.strength;
+        }
+
+        foreach (Pheromone attractor in PheromoneManager.Instance.Pheromones)
+        {
+            average += (Vector2) attractor.transform.position * attractor.strength / totalStrength;
+        }
+
+        pheromoneAverage = average;
+    }
+
+    private void OnDrawGizmos()
+    {
+        EvaluatePheromoneAverage();
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(pheromoneAverage, 0.5f);
+    }
 }
 
 public class SearchState : State
@@ -110,12 +147,14 @@ public class SearchState : State
     {
         Debug.Log("Enter Search State");
         hitman.Agent.isStopped = false;
-        hitman.Agent.SetDestination(hitman.LastPlayerPos); //move to the last known position
+        //hitman.Agent.SetDestination(hitman.LastPlayerPos); //move to the last known position
     }
 
     public override void Update()
     {
+        hitman.EvaluatePheromoneAverage();
         hitman.LookMovementDir();
+        
         if (hitman.HasLOS) hitman.SM.SetCurrentState(HitmanStates.Chase);
     }
 }
@@ -144,5 +183,10 @@ public class ChaseState : State
 
         hitman.Agent.SetDestination(hitman.Target.position);
         hitman.LookAtPosition(hitman.Target.position);
+    }
+
+    public override void Exit()
+    {
+        PheromoneManager.CreatePheromone(hitman.Target.position, PheromoneManager.Instance.ExitChasePheromones); //create strong pheromones where the player last was
     }
 }
