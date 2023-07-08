@@ -12,6 +12,9 @@ public class Pheromone : MonoBehaviour
     public AnimationCurve Falloff = AnimationCurve.Linear(0, 1, 1, 0);
     [Min(0)] public float Duration = 1;
 
+    public LayerMask BlockingMask;
+    public float ObscurityDampening = 0.5f;
+
     [Header("Read-Only")]
     [Tooltip("The strength that the hitman actually reads.")]
     public float strength;
@@ -29,16 +32,28 @@ public class Pheromone : MonoBehaviour
     // Using fixed update because it should have consistent deltaTime
     void FixedUpdate()
     {
-        if (Duration > 0)
-        {
-            m_Strength -= fadeSpeed * Time.fixedDeltaTime;
-            strength = m_Strength * Falloff.Evaluate(Vector2.Distance(transform.position, Hitman.Instance.transform.position) / Range); //evaluate the actual strength based on distance
-            Duration -= Time.fixedDeltaTime;
-        }
-        else
+        if (Duration <= 0)
         {
             Destroy(gameObject);
         }
+
+        m_Strength -= fadeSpeed * Time.fixedDeltaTime;
+        strength = m_Strength;
+        strength *= Falloff.Evaluate(Vector2.Distance(transform.position, Hitman.Instance.transform.position) / Range); //evaluate the actual strength based on distance
+
+        RaycastHit2D hit = Physics2D.Linecast(transform.position, Hitman.Instance.transform.position, BlockingMask);
+        if (hit.transform != null) strength *= ObscurityDampening; //lower the intensity of the pheromones if they are behind a wall
+
+
+        Duration -= Time.fixedDeltaTime;
+
+
+
+    }
+
+    private void Update()
+    {
+        
     }
 
     private void OnDestroy()

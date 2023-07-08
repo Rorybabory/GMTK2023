@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f8a5c4157d61747a306302be38d4a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Strength: 10
+  m_Strength: 5
   Range: 5
   Falloff:
     serializedVersion: 2
@@ -70,5 +70,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Duration: 0.5
+  Duration: 0.2
+  BlockingMask:
+    serializedVersion: 2
+    m_Bits: 64
+  ObscurityDampening: 0.5
   strength: 0
