@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour {
 
     [SerializeField] private float walkAnimSpeed, sprintAnimSpeed;
+    [SerializeField] private SoundEffect stepSound;
 
     private Animator animator;
     private SpriteRenderer rend;
@@ -20,10 +21,16 @@ public class PlayerAnimation : MonoBehaviour {
 
     private Animation currentAnimation;
 
+    public void StepSound() => stepSound.Play();
+
     private void Awake() {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rend = GetComponent<SpriteRenderer>();
+    }
+
+    private void Start() {
+        stepSound.Init(gameObject);
     }
 
     private void Update() {
