@@ -21,7 +21,6 @@ public class PlayerMechanics : MonoBehaviour
     [SerializeField] private float pushbackDuration = 1.5f;
     [SerializeField] private KeyCode PushbackKey;
     [SerializeField] private KeyCode SprintKey;
-    [SerializeField] private PheremoneManager;
 
     //Variables
     private Rigidbody2D rb;
