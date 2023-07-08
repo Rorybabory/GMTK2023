@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ca8abcbe88e194e06b0334740414cf11
+guid: 48f98edf5d2ce49efb03adaa1a80b480
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -42,7 +42,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -115,112 +115,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: apartment decorations_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 56
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fdc865ce49b5047b0bd5bff316d5c82d
-      internalID: 298718030
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: apartment decorations_1
-      rect:
-        serializedVersion: 2
-        x: 8
-        y: 56
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9c2cea1c33fcb490da6256c10033fcd2
-      internalID: 50037639
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: apartment decorations_2
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 56
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4d7659484013847319d80003e43b1681
-      internalID: -1476325165
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: apartment decorations_3
-      rect:
-        serializedVersion: 2
-        x: 24
-        y: 56
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f5759ba0509974a1d8a506fb6a6fab4a
-      internalID: 651947921
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: apartment decorations_4
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 56
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 43f00237dd67c4b0fbbb28f058bd49db
-      internalID: -777307945
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -231,12 +126,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      apartment decorations_4: -777307945
-      apartment decorations_3: 651947921
-      apartment decorations_0: 298718030
-      apartment decorations_1: 50037639
-      apartment decorations_2: -1476325165
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
