@@ -6,7 +6,7 @@ public class Pickup : MonoBehaviour
 {
     private bool mousepressed = false;
     private GameObject held = null;
-
+    private GameObject light = null;
     private bool mousereset = false;
     private Vector2 dir = new Vector2(0.0f, 0.0f);
     [SerializeField] private float tossScale = 1.0f;
@@ -19,16 +19,20 @@ public class Pickup : MonoBehaviour
     void Start()
     {
         source = GetComponent<AudioSource>();
+/*        light = transform.GetChild(0).gameObject;*/
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         Vector3 mpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        
         dir = (new Vector2(mpos.x, mpos.y) - new Vector2(this.transform.position.x, this.transform.position.y));
         mpos.z = 0.0f;
         float dist = Vector3.Distance(this.transform.position, mpos);
         dir.Normalize();
+/*        light.transform.right = new Vector3(dir.y, -dir.x, 0.0f);*/
+
         if (Input.GetMouseButton(1))
         {
             mousepressed = true;
