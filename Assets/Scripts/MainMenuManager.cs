@@ -31,7 +31,7 @@ public class MainMenuManager : MonoBehaviour {
 
     private State state = State.main;
     private Vector2 position, start, end;
-    
+
     public static void Load(bool completed) {
 
         if (completed) {
