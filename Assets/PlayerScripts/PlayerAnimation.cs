@@ -24,7 +24,7 @@ public class PlayerAnimation : MonoBehaviour {
     public void StepSound()
     {
         stepSound.Play();
-        PheromoneManager.CreatePheromone(transform.position, PheromoneManager.Instance.FootstepPheromone);
+        //PheromoneManager.CreatePheromone(transform.position, PheromoneManager.Instance.FootstepPheromone);
     }
 
     private void Awake() {

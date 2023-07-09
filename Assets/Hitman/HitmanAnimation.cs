@@ -73,6 +73,6 @@ public class HitmanAnimation : MonoBehaviour {
         var newAnimation = moving ? Animation.running : Animation.idle;
         UpdateAnimation(newAnimation);
 
-        animator.speed = speed >= hitman.SprintSpeed ? sprintAnimSpeed : walkAnimSpeed;
+        //animator.speed = speed >= hitman.SprintSpeed ? sprintAnimSpeed : walkAnimSpeed;
     }
 }

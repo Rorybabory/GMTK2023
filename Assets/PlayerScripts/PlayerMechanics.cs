@@ -8,9 +8,9 @@ public class PlayerMechanics : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hitman = FindObjectOfType<Hitman>();
-        navmesh = hitman.GetComponent<NavMeshAgent>();
-        hitmanRb = hitman.GetComponent<Rigidbody2D>();
+        //hitman = FindObjectOfType<Hitman>();
+        //navmesh = hitman.GetComponent<NavMeshAgent>();
+        //hitmanRb = hitman.GetComponent<Rigidbody2D>();
         isHidden = false;
         bIsHiding = false;
     }
@@ -88,10 +88,10 @@ public class PlayerMechanics : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if(!isHidden) PheromoneManager.CreatePheromone(rb.transform.position, PlayerTrailPheromone);
-    }
+    //private void FixedUpdate()
+    //{
+    //    if(!isHidden) PheromoneManager.CreatePheromone(rb.transform.position, PlayerTrailPheromone);
+    //}
 
     void PushBack()
     {
