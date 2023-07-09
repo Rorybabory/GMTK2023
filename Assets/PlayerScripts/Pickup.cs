@@ -79,16 +79,30 @@ public class Pickup : MonoBehaviour
 
         if (mousepressed == true && mousereset == true)
         {
-            Debug.Log("Picking Up");
-            other.transform.parent.gameObject.transform.position = new Vector3(0, 0, 0);
+            if (other.transform.parent.gameObject.tag == "Pickup")
+            {
+                Debug.Log("Picking Up");
+                other.transform.parent.gameObject.transform.position = new Vector3(0, 0, 0);
+
+
+                other.transform.parent.gameObject.transform.SetParent(this.gameObject.transform, false);
+                other.enabled = false;
+                other.transform.parent.gameObject.GetComponent<Collider2D>().enabled = false;
+                held = other.transform.parent.gameObject;
+                mousereset = false;
+                pickup.Play();
+            }else if (other.transform.parent.gameObject.tag == "Interactable")
+            {
+                Interact interact = other.transform.parent.gameObject.GetComponent<Interact>();
+                if (interact == null) {
+                    Debug.Log("Interact not found\n");
+                    return;
+
+                }
+                interact.Used(this.gameObject);
+                mousereset = false;
+            }
             
-            
-            other.transform.parent.gameObject.transform.SetParent(this.gameObject.transform, false);
-            other.enabled = false;
-            other.transform.parent.gameObject.GetComponent<Collider2D>().enabled = false;
-            held = other.transform.parent.gameObject;
-            mousereset = false;
-            pickup.Play();
         }
         
 
