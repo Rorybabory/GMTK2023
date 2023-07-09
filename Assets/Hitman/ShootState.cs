@@ -75,8 +75,7 @@ public class ShootState : State
                     if (hit.collider.gameObject.tag == "Player")
                     {
                         hitman.shoot.Play();
-                        Time.timeScale = 0;
-                        canvas.GetComponent<Canvas>().enabled = true;
+                        UIManager.TriggerGameOver();
                     }
                 }
                 

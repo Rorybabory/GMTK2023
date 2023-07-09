@@ -5,6 +5,7 @@ using UnityEngine;
 public class Door : Interact
 {
     private bool open = false;
+    [SerializeField] private bool locked = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,9 @@ public class Door : Interact
 
     public override void Used(GameObject player)
     {
+        if (locked && player != null) { return; }
+        
+        
         open = !open;
         
         if (open)
