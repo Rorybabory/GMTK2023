@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f8a5c4157d61747a306302be38d4a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Strength: 1
-  Range: 15
+  m_Strength: 5
+  Range: 25
   Falloff:
     serializedVersion: 2
     m_Curve:
@@ -70,7 +70,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Duration: 0.5
+  Duration: 2
   BlockingMask:
     serializedVersion: 2
     m_Bits: 0
