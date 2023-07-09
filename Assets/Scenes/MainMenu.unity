@@ -2745,8 +2745,8 @@ MonoBehaviour:
     timer: 0
   menuPosition: {fileID: 489243396}
   levels:
-  - displayName: Level 1 - Sussy Baka
-    sceneName: bruh moment
+  - displayName: Level 1 - Test Level
+    sceneName: Rory's Scene
   - displayName: Level 1 - Sussy Baka
     sceneName: bruh moment
   - displayName: Level 1 - Sussy Baka
