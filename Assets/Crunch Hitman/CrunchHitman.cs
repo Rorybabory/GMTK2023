@@ -11,7 +11,7 @@ public class CrunchHitman : MonoBehaviour {
 
     [Header("Movement")]
     [SerializeField] private float turnSpeed;
-    [SerializeField] private float aimSpeed;
+    [SerializeField] private float aimSpeed, chasePlayerTime;
 
     [Header("Patrolling")]
     [SerializeField] private int pickNewPatrolCount;
@@ -70,9 +70,9 @@ public class CrunchHitman : MonoBehaviour {
 
     private IEnumerator UpdateCoroutine() {
 
-        print("update started");
-
         while (true) {
+
+            agent.enabled = true;
 
             switch (state) {
 
@@ -123,7 +123,9 @@ public class CrunchHitman : MonoBehaviour {
                         agent.SetDestination((Vector2)currentRoom.transform.position + Random.insideUnitCircle * roomPatrolDist);
                         yield return waitForAgentDestinationUpdate;
 
+                        timer = 0;
                         while (state == State.patrollingRoom) {
+                            timer += Time.deltaTime;
                             if (reachedTarget) break;
                             yield return null;
                         }
@@ -139,47 +141,51 @@ public class CrunchHitman : MonoBehaviour {
 
                 case State.chasing:
 
+                    timer = 0;
                     while (state == State.chasing) {
+                        timer += Time.deltaTime;
 
                         agent.SetDestination(player.position);
 
-                        if (!visible) ChangeState(State.headingToRoom);
+                        if (timer > chasePlayerTime && !visible) ChangeState(State.headingToRoom);
                         yield return null;
                     }
 
                     break;
 
-                case State.attacking:
+                case State.attacking: yield return Attack(); IEnumerator Attack() {
 
-                    agent.enabled = false;
+                        agent.enabled = false;
 
-                    while (!anim.Shoot()) {
-                        aimAngle = anim.AimGun(player.position);
-                        yield return null;
-                    }
-
-                    yield return new WaitForSeconds(shootDelay);
-
-                    while (state == State.attacking) {
-
-                        if (anim.Shoot()) {
-                            UIManager.TriggerGameOver();
-                            yield break;
-                        }
-
-                        timer = 0;
-                        while (state == State.attacking) {
-                            timer += Time.deltaTime;
+                        while (!anim.Shoot()) {
                             aimAngle = anim.AimGun(player.position);
-
-                            if (timer > fireRate) break;
-                            else if (!visible) ChangeState(State.chasing);
                             yield return null;
                         }
-                    }
 
-                    agent.enabled = true;
-                    break;
+                        yield return new WaitForSeconds(shootDelay);
+
+                        while (state == State.attacking) {
+
+                            if (anim.Shoot()) {
+                                UIManager.TriggerGameOver();
+                                yield break;
+                            }
+
+                            timer = 0;
+                            while (timer < fireRate) {
+                                timer += Time.deltaTime;
+                                aimAngle = anim.AimGun(player.position);
+
+                                if (!visible) {
+                                    ChangeState(State.chasing);
+                                    yield break;
+                                }
+
+                                yield return null;
+                            }
+                        }
+
+                }   break;
             }
 
             yield return null;
