@@ -8,6 +8,7 @@ public class PlayerAnimation : MonoBehaviour {
     [SerializeField] private float walkAnimSpeed, sprintAnimSpeed;
     [SerializeField] private SoundEffect stepSound;
     [SerializeField] private Sprite deadSprite;
+    [SerializeField] private bool usePheromones = false;
 
     private SpriteRenderer sprender;
     private Animator animator;
@@ -26,7 +27,7 @@ public class PlayerAnimation : MonoBehaviour {
     public void StepSound()
     {
         stepSound.Play();
-        //PheromoneManager.CreatePheromone(transform.position, PheromoneManager.Instance.FootstepPheromone);
+        if(usePheromones) PheromoneManager.CreatePheromone(transform.position, PheromoneManager.Instance.FootstepPheromone);
     }
 
     private void Awake() {
