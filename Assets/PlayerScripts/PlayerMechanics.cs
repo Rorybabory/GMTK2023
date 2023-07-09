@@ -22,6 +22,8 @@ public class PlayerMechanics : MonoBehaviour
     [SerializeField] private KeyCode PushbackKey;
     [SerializeField] private KeyCode SprintKey;
 
+    public bool isHidden = true;
+
     //Variables
     private Rigidbody2D rb;
     private bool bIsSprinting = false;
