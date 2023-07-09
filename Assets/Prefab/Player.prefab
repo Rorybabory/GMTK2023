@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2098125636}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56,6 +56,11 @@ MonoBehaviour:
   pushbackDuration: 1.5
   PushbackKey: 306
   SprintKey: 304
+  pushbackRadius: 2
+  pushbackCooldown: 3
+  PheromoneManager: {fileID: 0}
+  PlayerTrailPheromone: {fileID: 4469000438530472423, guid: 260a468f712594d4784492749c332567, type: 3}
+  isHidden: 0
 --- !u!50 &7356676404278431244
 Rigidbody2D:
   serializedVersion: 4
@@ -74,7 +79,7 @@ Rigidbody2D:
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!58 &-1354413824240790310
