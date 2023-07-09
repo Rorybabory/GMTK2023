@@ -24,6 +24,6 @@ public class Hideable : Interact
         Debug.Log("Inside Fridge: " + insideFridge);
         player.GetComponent<PlayerMechanics>().isHidden = insideFridge;
         player.GetComponent<Renderer>().enabled = !insideFridge;
-        player.transform.velocity = new Vector3(0, 0, 0);
+        player.GetComponent<Rigidbody2D>().velocity = new Vector3(0, 0, 0);
     }
 }
