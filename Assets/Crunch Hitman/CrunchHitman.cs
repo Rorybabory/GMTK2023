@@ -24,6 +24,7 @@ public class CrunchHitman : MonoBehaviour {
     private Transform player;
     private PlayerMechanics playerInfo;
     private NavMeshAgent agent;
+    private Collider2D col;
     private HitmanAnimation anim;
 
     private const float waitForAgentDestinationUpdate = 0.1f;
@@ -50,6 +51,7 @@ public class CrunchHitman : MonoBehaviour {
 
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<HitmanAnimation>();
+        col = GetComponent<Collider2D>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerInfo = player.GetComponent<PlayerMechanics>();
@@ -190,9 +192,12 @@ public class CrunchHitman : MonoBehaviour {
 
         Vector2 distToPlayer = player.position - transform.position;
 
+        col.enabled = false;
         visible =
             Vector2.Angle(transform.right, distToPlayer) < Mathf.Lerp(fieldOfViewAngle, 360, playerInfo.volume) / 2
-            && Physics2D.Raycast(transform.position, distToPlayer, maxViewDist).collider.gameObject.CompareTag("Player");
+            && Physics2D.Raycast(transform.position, distToPlayer, maxViewDist).collider.gameObject.CompareTag("Player")
+            && !playerInfo.isHidden;
+        col.enabled = true;
 
         if (visible && state != State.attacking) {
             StopCoroutine(UpdateCoroutine());
@@ -215,6 +220,15 @@ public class CrunchHitman : MonoBehaviour {
         Debug.DrawLine(transform.position, agent.destination, Color.green);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.TryGetComponent(out Door door))
+            door.Used(null);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.TryGetComponent(out Door door))
+            door.Used(null);
+    }
 
     private void OnDrawGizmos() {
 

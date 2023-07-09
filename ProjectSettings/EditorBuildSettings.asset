@@ -6,12 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Blake's Scene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-    path: Assets/Scenes/Rory's Scene.unity
-    guid: 9516f8602856e6045bafb756c92fdd21
-  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 86f95b953776da64ebe96b8f07f5c3e5
   - enabled: 1
