@@ -83,7 +83,7 @@ public class CrunchHitman : MonoBehaviour {
 
                     // find closest
                     float dist = Mathf.Infinity;
-                    GameObject close = null;
+                    GameObject close = uncheckedRooms.Count == 1 ? uncheckedRooms[0] : null;
                     foreach (var room in uncheckedRooms) {
 
                         if (room == currentRoom) continue;
