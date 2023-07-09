@@ -18,11 +18,13 @@ public class PlayerMechanics : MonoBehaviour
     //exposed Variables
     private float moveSpeed;
     [SerializeField] private float walkSpeed = 2;
+    [SerializeField] private float sneakSpeed = 1;
     [SerializeField] private float sprintSpeed = 5;
     [SerializeField] private float pushbackStrength = 10;
     [SerializeField] private float pushbackDuration = 0.7f;
     [SerializeField] private KeyCode PushbackKey;
     [SerializeField] private KeyCode SprintKey;
+    [SerializeField] private KeyCode SneakKey;
     [SerializeField] private float pushbackRadius = 2;
     [SerializeField] private float pushbackCooldown = 3;
     
@@ -75,14 +77,14 @@ public class PlayerMechanics : MonoBehaviour
             prevDirection = input;
         }
         //Sprinting
-        SetSprint(Input.GetKey(SprintKey));
+        SetKey(Input.GetKey(SprintKey), Input.GetKey(SneakKey));
         if (Input.GetKeyDown(PushbackKey))
         {
             PushBack();
         }
     }
 
-    void SetSprint(bool bStartSprint)
+    void SetKey(bool bStartSprint, bool bStartSneak)
     {
         
         if (bStartSprint)
@@ -90,7 +92,11 @@ public class PlayerMechanics : MonoBehaviour
             moveSpeed = sprintSpeed;
             volume = 1.0f;
         }
-        if (!bStartSprint)
+        else if (bStartSneak)
+        {
+            moveSpeed = sneakSpeed;
+            volume = 0.0f;
+        }else
         {
             moveSpeed = walkSpeed;
             volume = 0.5f;
