@@ -37,6 +37,8 @@ public class Hitman : MonoBehaviour
 
     [Tooltip("Lowest strength for a pheromone to be attractive")]
     public float MinPheromoneLevel = 0.15f;
+    public float SuspicionRemoval = 0.5f;
+
     [SerializeField] public SoundEffect shoot;
 
     [Header("Readonly Stuff")]
@@ -200,7 +202,11 @@ public class InvestigateState : State
         //Repeat until state change
 
 
+    }
 
+    public override void FixedUpdate()
+    {
+        SuspicionManager.Instance.AddSusWorld(hitman.transform.position.x, hitman.transform.position.y, -hitman.SuspicionRemoval);
     }
 
     public override void Exit()

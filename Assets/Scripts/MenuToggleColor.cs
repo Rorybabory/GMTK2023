@@ -8,19 +8,23 @@ public class MenuToggleColor : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     [SerializeField] private Color defaultColor, hoverColor, pressedColor;
     [SerializeField] private Graphic image;
+    [SerializeField] private List<Graphic> otherImages;
     [SerializeField] private bool usePressedColor = false;
 
     private bool hovering, clicking;
 
     private void Update() {
 
-        image.color = usePressedColor
+        var color = usePressedColor
             ?
                 clicking ? pressedColor
                 : hovering ? hoverColor
                 : defaultColor
             :
                 hovering || clicking ? hoverColor : defaultColor;
+
+        if (image != null) image.color = color;
+        if (otherImages != null) otherImages.ForEach(i => i.color = color);
     }
 
     private void OnDisable() {
