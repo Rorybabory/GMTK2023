@@ -76,7 +76,7 @@ public class Hitman : MonoBehaviour
         SM.AddState(HitmanStates.Chase, new ChaseState(this));
         SM.AddState(HitmanStates.Shoot, new ShootState(this));
 
-        SM.SetCurrentState(HitmanStates.Chase);
+        SM.SetCurrentState(HitmanStates.Investigate);
 
         shoot.Init(gameObject);
     } 

@@ -8,6 +8,7 @@ TagManager:
   - Interactable
   - Hitman
   - Win Trigger
+  - RoomNode
   layers:
   - Default
   - TransparentFX
