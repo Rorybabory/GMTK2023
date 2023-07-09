@@ -37,6 +37,7 @@ public class Hitman : MonoBehaviour
 
     [Tooltip("Lowest strength for a pheromone to be attractive")]
     public float MinPheromoneLevel = 0.15f;
+    [SerializeField] public SoundEffect shoot;
 
 
     [Header("Readonly Stuff")]
@@ -74,7 +75,9 @@ public class Hitman : MonoBehaviour
         SM.AddState(HitmanStates.Shoot, new ShootState(this));
 
         SM.SetCurrentState(HitmanStates.Chase);
-    }
+
+        shoot.Init(gameObject);
+    } 
 
     void Update()
     {

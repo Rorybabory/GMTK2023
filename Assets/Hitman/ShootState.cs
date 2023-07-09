@@ -61,6 +61,26 @@ public class ShootState : State
 
             animation.Shoot();
 
+            GameObject canvas = GameObject.Find("GameOver");
+            if (canvas != null)
+            {
+                RaycastHit2D hit = Physics2D.Raycast(hitman.transform.position+hitman.transform.right * 2.0f, hitman.transform.right, 1000.0f, LayerMask.GetMask("Player"));
+                Debug.DrawRay(hitman.transform.position + hitman.transform.forward * 2.0f, hitman.transform.forward, Color.green);
+                if (hit.collider != null)
+                {
+                    Debug.Log("TAG: " + hit.collider.gameObject.tag);
+                    Debug.Log("x: " + hit.point.x + " y: " + hit.point.y);
+
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        hitman.shoot.Play();
+                        Time.timeScale = 0;
+                        canvas.GetComponent<Canvas>().enabled = true;
+                    }
+                }
+                
+                    
+            }
             // todo: other shooting logic
         }
     }

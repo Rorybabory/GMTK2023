@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2056458846
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2056458847}
+  m_Layer: 0
+  m_Name: tip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2056458847
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056458846}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.361, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5885008622413572377}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5885008620995457629
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +198,7 @@ GameObject:
   - component: {fileID: 1796144909}
   - component: {fileID: 7632679699453197182}
   - component: {fileID: 5747199612041961150}
+  - component: {fileID: 1163240466}
   m_Layer: 0
   m_Name: Hitman
   m_TagString: Untagged
@@ -187,6 +219,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5885008620995457628}
+  - {fileID: 2056458847}
   - {fileID: 7673571138631623070}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -264,7 +297,18 @@ MonoBehaviour:
   WalkSpeed: 3
   SprintSpeed: 5
   TurnLerp: 4
+  ShootRange: 8
+  FirstShotWaitTime: 2
+  FireRate: 1
   MinPheromoneLevel: 0.1
+  shoot:
+    clip:
+    - {fileID: 8300000, guid: 18d91945d554945a29df13247d89bfe6, type: 3}
+    volume: 1
+    minPitch: 0.3
+    maxPitch: 0.45
+    sequential: 0
+    overlap: 1
   Agent: {fileID: 0}
   LastPlayerPos: {x: 0, y: 0}
   pheromoneTarget: {x: 0, y: 0}
@@ -347,7 +391,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkAnimSpeed: 0.5
   sprintAnimSpeed: 2
-  gunTip: {fileID: 7673571138631623070}
+  gunTip: {fileID: 2056458847}
+--- !u!58 &1163240466
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5885008622413572379}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &6130669101582151947
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,5 +437,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5885008622413572377}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

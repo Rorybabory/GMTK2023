@@ -11,6 +11,8 @@ public class PlayerMechanics : MonoBehaviour
         hitman = FindObjectOfType<Hitman>();
         navmesh = hitman.GetComponent<NavMeshAgent>();
         hitmanRb = hitman.GetComponent<Rigidbody2D>();
+        isHidden = false;
+        bIsHiding = false;
     }
 
     //exposed Variables
@@ -27,7 +29,7 @@ public class PlayerMechanics : MonoBehaviour
     public PheromoneManager PheromoneManager;
     public Pheromone PlayerTrailPheromone;
 
-    public bool isHidden = true;
+    public bool isHidden = false;
 
     //Variables
     private Rigidbody2D rb;
@@ -38,7 +40,8 @@ public class PlayerMechanics : MonoBehaviour
     private Rigidbody2D hitmanRb;
     private Vector2 prevDirection;
     private bool bCanPushBack = true;
-    
+   
+
     void ToggleHide() 
     {
         bIsHiding = !bIsHiding;
