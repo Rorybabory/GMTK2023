@@ -45,7 +45,7 @@ public class MainMenuManager : MonoBehaviour {
 
     private void Awake() {
 
-        staticLevels = levels;
+        staticLevels = new(levels);
 
         foreach (var level in levels.GetRange(0, levelsCompleted + 1)) {
             var button = Instantiate(levelSelectButtonPrefab, levelSelectParent);
