@@ -4181,6 +4181,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7356676404278431241, guid: 1deb758955cdfb04cb484348067c219e, type: 3}
+      propertyPath: PushbackKey
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 7356676404278431241, guid: 1deb758955cdfb04cb484348067c219e, type: 3}
       propertyPath: PheromoneManager
       value: 
       objectReference: {fileID: 49458336}
@@ -9815,6 +9819,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 527010238, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 527010238, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 4866979651115466113, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: m_Name
       value: Game Manager
