@@ -27,6 +27,8 @@ public class PlayerMechanics : MonoBehaviour
     public PheromoneManager PheromoneManager;
     public Pheromone PlayerTrailPheromone;
 
+    public bool isHidden = true;
+
     //Variables
     private Rigidbody2D rb;
     private bool bIsSprinting = false;
