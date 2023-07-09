@@ -7,6 +7,7 @@ TagManager:
   - Pickup
   - Interactable
   - Hitman
+  - Win Trigger
   layers:
   - Default
   - TransparentFX
