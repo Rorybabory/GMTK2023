@@ -7,7 +7,9 @@ public class PlayerAnimation : MonoBehaviour {
 
     [SerializeField] private float walkAnimSpeed, sprintAnimSpeed;
     [SerializeField] private SoundEffect stepSound;
+    [SerializeField] private Sprite deadSprite;
 
+    private SpriteRenderer sprender;
     private Animator animator;
     private Rigidbody2D rb;
 
@@ -34,10 +36,15 @@ public class PlayerAnimation : MonoBehaviour {
 
     private void Start() {
         stepSound.Init(gameObject);
+        sprender = GetComponent<SpriteRenderer>();
     }
 
     private void Update() {
-
+        if (UIManager.getGameEnd())
+        {
+            Debug.Log("Dead sprite");
+            sprender.sprite = deadSprite;
+        }
         float speed = rb.velocity.magnitude;
         bool moving = speed > 0.1f;
 
