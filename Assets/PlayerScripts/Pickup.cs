@@ -11,15 +11,16 @@ public class Pickup : MonoBehaviour
     private Vector2 dir = new Vector2(0.0f, 0.0f);
     [SerializeField] private float tossScale = 1.0f;
 
-    private AudioSource source;
-    [SerializeField] private AudioClip pickup;
-    [SerializeField] private AudioClip drop;
-    [SerializeField] private AudioClip toss;
+    [SerializeField] private SoundEffect pickup;
+    [SerializeField] private SoundEffect drop;
+    [SerializeField] private SoundEffect toss;
     // Start is called before the first frame update
     void Start()
     {
-        source = GetComponent<AudioSource>();
-/*        light = transform.GetChild(0).gameObject;*/
+        pickup.Init(gameObject);
+        drop.Init(gameObject);
+        toss.Init(gameObject);
+        /*        light = transform.GetChild(0).gameObject;*/
     }
 
     // Update is called once per frame
@@ -46,8 +47,7 @@ public class Pickup : MonoBehaviour
                 
                 held = null;
                 mousereset = false;
-                source.clip = toss;
-                source.Play();
+                toss.Play();
             }
         }
         if (Input.GetMouseButton(0))
@@ -61,8 +61,7 @@ public class Pickup : MonoBehaviour
                 held.transform.position = this.transform.position + new Vector3(dir.x, dir.y, 0.0f);
                 held = null;
                 mousereset = false;
-                source.clip = drop;
-                source.Play();
+                drop.Play();
             }
         }
         else
@@ -89,8 +88,7 @@ public class Pickup : MonoBehaviour
             other.transform.parent.gameObject.GetComponent<Collider2D>().enabled = false;
             held = other.transform.parent.gameObject;
             mousereset = false;
-            source.clip = pickup;
-            source.Play();
+            pickup.Play();
         }
         
 
