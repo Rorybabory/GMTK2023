@@ -9,7 +9,8 @@ public class CrunchHitman : MonoBehaviour {
     [SerializeField] private float fieldOfViewAngle;
     [SerializeField] private float maxViewDist;
 
-    //[Header("Movement")]
+    [Header("Movement")]
+    [SerializeField] private float turnSpeed;
 
     [Header("Patrolling")]
     [SerializeField] private int pickNewPatrolCount;
@@ -20,17 +21,19 @@ public class CrunchHitman : MonoBehaviour {
     [SerializeField] private float fireRate;
 
     private Transform player;
+    private PlayerMechanics playerInfo;
     private NavMeshAgent agent;
     private HitmanAnimation anim;
 
     private const float waitForAgentDestinationUpdate = 0.1f;
 
-    private Vector2 distToPlayer;
     private bool visible;
     private List<GameObject> rooms;
 
     private GameObject currentRoom;
     private List<GameObject> uncheckedRooms;
+
+    private float aimAngle;
 
     // state stuff
     private enum State { headingToRoom, patrollingRoom, chasing, attacking }
@@ -47,9 +50,11 @@ public class CrunchHitman : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<HitmanAnimation>();
 
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerInfo = player.GetComponent<PlayerMechanics>();
+
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
 
         rooms = new(GameObject.FindGameObjectsWithTag("RoomNode"));
 
@@ -142,14 +147,14 @@ public class CrunchHitman : MonoBehaviour {
                 case State.attacking:
 
                     bool firstShotTaken = false;
+                    agent.enabled = false;
 
                     while (state == State.attacking) {
-                        agent.enabled = false;
 
                         timer = firstShotTaken ? firstShotWaitTime : fireRate;
                         while (state == State.attacking) {
                             timer -= Time.deltaTime;
-                            anim.AimGun(player.position);
+                            aimAngle = anim.AimGun(player.position);
 
                             if (timer < 0) break;
                             else if (!visible) ChangeState(State.chasing);
@@ -163,6 +168,7 @@ public class CrunchHitman : MonoBehaviour {
                         }
                     }
 
+                    agent.enabled = true;
                     break;
             }
 
@@ -174,19 +180,29 @@ public class CrunchHitman : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Space)) ChangeState(State.headingToRoom);
 
-        distToPlayer = player.position - transform.position;
+        Vector2 distToPlayer = player.position - transform.position;
+
         visible =
-            Vector2.Angle(transform.right, distToPlayer) < fieldOfViewAngle / 2
+            Vector2.Angle(transform.right, distToPlayer) < Mathf.Lerp(fieldOfViewAngle, 360, playerInfo.volume) / 2
             && Physics2D.Raycast(transform.position, distToPlayer, maxViewDist).collider.gameObject.CompareTag("Player");
 
-        if (visible) {
+        if (visible && state != State.attacking) {
             StopCoroutine(UpdateCoroutine());
             ChangeState(State.attacking);
             StartCoroutine(UpdateCoroutine());
         }
 
-        if (!(agent.destination.x == Mathf.Infinity || agent.destination.y == Mathf.Infinity))
-            transform.eulerAngles = Vector3.forward * Vector2.SignedAngle(Vector2.right, agent.destination - transform.position);
+        if (!(agent.destination.x == Mathf.Infinity || agent.destination.y == Mathf.Infinity)) {
+
+            float target = state == State.attacking ? aimAngle : Vector2.SignedAngle(Vector2.right, agent.destination - transform.position),
+                  angle = transform.eulerAngles.z,
+                  delta = Mathf.DeltaAngle(angle, target),
+                  vel = Mathf.Sign(delta) * turnSpeed * Time.deltaTime;
+
+            if (Mathf.Abs(vel) > Mathf.Abs(delta)) vel = Mathf.Clamp(vel, -delta, delta);
+
+            transform.eulerAngles += Vector3.forward * vel;
+        }
         Debug.DrawLine(transform.position, agent.destination, Color.green);
     }
 
@@ -194,10 +210,10 @@ public class CrunchHitman : MonoBehaviour {
     private void OnDrawGizmos() {
 
         Gizmos.color = Color.red;
-        float center = transform.eulerAngles.z;
+        float center = transform.eulerAngles.z, viewAngle = Mathf.Lerp(fieldOfViewAngle, 360, playerInfo == null ? 0 : playerInfo.volume);
 
         Vector2 ToVector2(float angle) => new(Mathf.Cos((center + angle) * Mathf.Deg2Rad), Mathf.Sin((center + angle) * Mathf.Deg2Rad));
-        Gizmos.DrawRay(transform.position, ToVector2(fieldOfViewAngle / 2) * 100);
-        Gizmos.DrawRay(transform.position, ToVector2(fieldOfViewAngle / -2f) * 100);
+        Gizmos.DrawRay(transform.position, ToVector2(viewAngle / 2) * 100);
+        Gizmos.DrawRay(transform.position, ToVector2(viewAngle / -2f) * 100);
     }
 }

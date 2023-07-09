@@ -43,11 +43,11 @@ public class HitmanAnimation : MonoBehaviour {
         Play(currentAnimation);
     }
 
-    public void AimGun(Vector2 target) {
+    public float AimGun(Vector2 target) {
 
         UpdateAnimation(Animation.aiming);
 
-        transform.right = target - (Vector2)(transform.position + gunTip.up * gunTip.localPosition.y);
+        return Vector2.SignedAngle(Vector2.up, target - (Vector2)(transform.position + gunTip.up * gunTip.localPosition.y));
     }
 
     public void StopAiming() {
