@@ -65,10 +65,13 @@ public class MainMenuManager : MonoBehaviour {
         if (spawnScene == mainMenuScene) return;
         SceneManager.LoadScene(mainMenuScene);
     }
-    private static string spawnScene;
 
+    private static string spawnScene;
     private void Start() {
-        if (spawnScene != mainMenuScene) SceneManager.LoadScene(spawnScene);
+        if (spawnScene != mainMenuScene) {
+            SceneManager.LoadScene(spawnScene);
+            spawnScene = mainMenuScene;
+        }
     }
 
     private void ChangeState(State newState) {
