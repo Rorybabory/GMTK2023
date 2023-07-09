@@ -46,7 +46,7 @@ public class SoundEffect {
             if (s.clip == null) source = s;
         if (source == null) source = host.AddComponent<AudioSource>();
 
-        //source.outputAudioMixerGroup = Audio.i.soundGroup;
+        source.outputAudioMixerGroup = Audio.SoundMixerGroup;
     }
 
     /// <summary> Play the sound effect. </summary>
@@ -74,62 +74,89 @@ public class SoundEffect {
     }
 }
 
-//public class Audio : MonoBehaviour {
+public class Audio : MonoBehaviour {
 
-//    [System.Serializable]
-//    public class SceneMusic {
-//        [HideInInspector] public string name;
-//        public Object scene;
-//        public AudioClip music;
-//        public float volume;
-//    }
+    [System.Serializable] public class SceneMusic {
 
-//    [SerializeField] private SceneMusic[] scenes;
-//    [SerializeField] internal AudioMixerGroup musicGroup, soundGroup;
+        public string scene;
+        public Music[] tracks;
 
-//    private void OnValidate() {
-//        foreach (SceneMusic m in scenes) m.name = m.scene != null ? m.scene.name : "No Scene :(";
-//    }
+        [System.Serializable] public class Music {
+            public AudioClip clip;
+            public float volume;
+        }
+    }   
 
-//    public static Audio i;
-//    private AudioSource musicSource;
+    [SerializeField] private float musicVolume, soundVolume;
+    [SerializeField] private List<SceneMusic> sceneMusic;
+    [SerializeField] private AudioMixerGroup musicGroup, soundGroup;
 
-//    private void Awake() {
-//        if (i == null) i = this;
-//        //else Destroy(gameObject);
-//        //DontDestroyOnLoad(this);
-//    }
+    public static AudioMixerGroup SoundMixerGroup => I.soundGroup;
 
-//    private void Start() {
+    private static Audio I;
+    private List<AudioSource> musicSources = new();
 
-//        musicSource = gameObject.AddComponent<AudioSource>();
-//        musicSource.outputAudioMixerGroup = musicGroup;
-//        musicSource.loop = true;
+    public static float MusicVolume {
+        get => I.musicVolume;
+        set => I.musicVolume = value;
+    }
+    public static float SoundVolume {
+        get => I.soundVolume;
+        set => I.soundVolume = value;
+    }
 
-//        UpdateMusic();
-//    }
+    private void Awake() {
 
-//    private void Update() {
+        if (I != null) {
+            Destroy(gameObject);
+            return;
+        }
 
-//        float mVol = UIManager.i.musicVolume,
-//              sVol = UIManager.i.soundEffectsVolume;
-//        var mix = musicGroup.audioMixer;
+        I = this;
+        DontDestroyOnLoad(this);
+    }
 
-//        mix.SetFloat("MusicVolume", mVol == 0 ? -80f : Mathf.Log10(mVol) * 20);
-//        mix.SetFloat("SoundVolume", sVol == 0 ? -80f : Mathf.Log10(sVol) * 20);
-//    }
+    private void Start() {
+        UpdateMusic(SceneManager.GetActiveScene().name);
+        SceneManager.activeSceneChanged += (scene1, scene2) => UpdateMusic(scene2.name);
+    }
 
-//    private void UpdateMusic() {
-//        string currentScene = SceneManager.GetActiveScene().name;
-//        foreach (SceneMusic m in scenes)
-//            if (m.scene.name == currentScene) {
+    private void Update() {
 
-//                musicSource.volume = m.volume;
-//                if (m.music != musicSource.clip) {
-//                    musicSource.clip = m.music;
-//                    musicSource.Play();
-//                }
-//                return;
-//            }
-//    }
-//}
+        float mVol = musicVolume,
+              sVol = soundVolume;
+        var mix = musicGroup.audioMixer;
+
+        mix.SetFloat("MusicVolume", mVol == 0 ? -80f : Mathf.Log10(mVol) * 40);
+        mix.SetFloat("SoundVolume", sVol == 0 ? -80f : Mathf.Log10(sVol) * 40);
+    }
+
+    private void NewMusicSource() {
+        var musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.outputAudioMixerGroup = musicGroup;
+        musicSource.loop = true;
+        musicSources.Add(musicSource);
+    }
+
+    private void UpdateMusic(string newSceneName) {
+
+        foreach (var source in musicSources) source.Stop();
+
+        var scene = sceneMusic.Find(s => s.scene == newSceneName);
+        if (scene == null) return;
+
+        for (int i = 0; i < scene.tracks.Length; i++) {
+
+            if (i == musicSources.Count) NewMusicSource();
+
+            var source = musicSources[i];
+            var track = scene.tracks[i];
+
+            source.volume = track.volume;
+
+            if (source.clip == track.clip) continue;
+            source.clip = track.clip;
+            source.Play();
+        }
+    }
+}
