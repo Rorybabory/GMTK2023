@@ -88,7 +88,7 @@ public class SuspicionManager : MonoBehaviour
                     if (CheckCell(x + 1, y)) adjacent++;
                     if (CheckCell(x - 1, y)) adjacent++;
 
-                    float amnt = SusMap[x, y].Value * diffuse / adjacent;
+                    float amnt = SusMap[x, y].Value * diffuse / 4;
 
                     void DoDiffuse(int _x, int _y) //diffuse the value to another cell relative to this one.
                     {
@@ -168,8 +168,11 @@ public class SuspicionManager : MonoBehaviour
 
     public Vector2Int WorldToSusMap(Vector2 position)
     {
-        //var tilemapPos = SearchAreas.WorldToCell(position);
-        return new Vector2Int((int)Mathf.Round(position.x + SearchAreas.localBounds.extents.x), (int)Mathf.Round(position.y + SearchAreas.localBounds.extents.y - 0.5f));
+        var tilemapPos = SearchAreas.WorldToCell(position);
+        Vector2Int value = (Vector2Int)tilemapPos - new Vector2Int((int)SearchAreas.localBounds.min.x, (int)SearchAreas.localBounds.min.y); //new Vector2Int((int)Mathf.Round(position.x + SearchAreas.localBounds.extents.x), (int)Mathf.Round(position.y + SearchAreas.localBounds.extents.y - 0.5f)) - (Vector2Int)SearchAreas.origin;
+
+        Debug.Log($"Position: {position}, Converted: {value}");
+        return value;
     }
 
     public void AddSus(int x, int y, float amount)
