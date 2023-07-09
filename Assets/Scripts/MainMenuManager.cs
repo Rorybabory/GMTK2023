@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour {
 
+    private const string mainMenuScene = "MainMenu";
+    
     [System.Serializable] private class Level {
         public string displayName, sceneName;
     }
@@ -40,7 +42,7 @@ public class MainMenuManager : MonoBehaviour {
                 levelsCompleted++;
         }
 
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(mainMenuScene);
     }
 
     private void Awake() {
@@ -55,6 +57,18 @@ public class MainMenuManager : MonoBehaviour {
 
             button.GetComponentInChildren<Button>().onClick.AddListener(() => SceneManager.LoadScene(level.sceneName));
         }
+    }
+
+    [RuntimeInitializeOnLoadMethod]
+    public static void GoThroughMenu() {
+        spawnScene = SceneManager.GetActiveScene().name;
+        if (spawnScene == mainMenuScene) return;
+        SceneManager.LoadScene(mainMenuScene);
+    }
+    private static string spawnScene;
+
+    private void Start() {
+        if (spawnScene != mainMenuScene) SceneManager.LoadScene(spawnScene);
     }
 
     private void ChangeState(State newState) {
