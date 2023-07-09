@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+
+public class MenuButton : MonoBehaviour
+{
+    public Button yourButton;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Button btn = yourButton.GetComponent<Button>();
+        btn.onClick.AddListener(OnClick);
+    }
+
+    void OnClick()
+    {
+        Time.timeScale = 1;
+        MainMenuManager.Load(true);
+    }
+}

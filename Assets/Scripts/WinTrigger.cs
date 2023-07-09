@@ -16,8 +16,14 @@ public class WinTrigger : MonoBehaviour
     {
         
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("YOU WINNN!");
+        if (other.gameObject.tag == "Player") {
+            GameObject canvas = GameObject.Find("WinScreen");
+            canvas.GetComponent<Canvas>().enabled = true;
+            Time.timeScale = 0;
+            Debug.Log("YOU WINNN!");
+        }
+        
     }
 }
