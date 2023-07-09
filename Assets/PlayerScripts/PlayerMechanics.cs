@@ -31,6 +31,8 @@ public class PlayerMechanics : MonoBehaviour
 
     public bool isHidden = false;
 
+    public float volume = 0.0f;
+
     //Variables
     private Rigidbody2D rb;
     private bool bIsSprinting = false;
@@ -63,6 +65,11 @@ public class PlayerMechanics : MonoBehaviour
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
         rb.velocity = input * moveSpeed;
+
+        
+        volume = Mathf.Clamp(volume, 0.0f, 1.0f);
+        
+
         if (input != Vector2.zero)
         {
             prevDirection = input;
@@ -72,7 +79,7 @@ public class PlayerMechanics : MonoBehaviour
         if (Input.GetKeyDown(PushbackKey))
         {
             PushBack();
-        }        
+        }
     }
 
     void SetSprint(bool bStartSprint)
@@ -81,10 +88,16 @@ public class PlayerMechanics : MonoBehaviour
         if (bStartSprint)
         {
             moveSpeed = sprintSpeed;
+            volume = 1.0f;
         }
         if (!bStartSprint)
         {
             moveSpeed = walkSpeed;
+            volume = 0.5f;
+        }
+        if (rb.velocity.magnitude == 0.0f)
+        {
+            volume = 0.0f;
         }
     }
 
