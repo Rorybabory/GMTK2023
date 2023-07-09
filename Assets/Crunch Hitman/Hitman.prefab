@@ -55,12 +55,21 @@ MonoBehaviour:
   maxViewDist: 100
   turnSpeed: 360
   aimSpeed: 360
+  chasePlayerTime: 0
   pickNewPatrolCount: 3
   roomPatrolDist: 5
   newPatrolWaitTime: 1
   patrolSpeed: 5
   fireRate: 1
   shootDelay: 0.5
+  shootSound:
+    clip:
+    - {fileID: 8300000, guid: 0f7a1d213be796f4d984a74349dbf8ee, type: 3}
+    volume: 1
+    minPitch: 1
+    maxPitch: 1
+    sequential: 0
+    overlap: 1
 --- !u!212 &254344118199863416
 SpriteRenderer:
   m_ObjectHideFlags: 0

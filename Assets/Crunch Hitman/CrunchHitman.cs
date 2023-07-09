@@ -20,6 +20,7 @@ public class CrunchHitman : MonoBehaviour {
     [Header("Attacking")]
     [SerializeField] private float fireRate;
     [SerializeField] private float shootDelay;
+    [SerializeField] private SoundEffect shootSound;
 
     private Transform player;
     private PlayerMechanics playerInfo;
@@ -65,6 +66,7 @@ public class CrunchHitman : MonoBehaviour {
     }
 
     private void Start() {
+        shootSound.Init(gameObject);
         StartCoroutine(UpdateCoroutine());
     }
 
@@ -166,6 +168,7 @@ public class CrunchHitman : MonoBehaviour {
 
                         while (state == State.attacking) {
 
+                            shootSound.Play();
                             if (anim.Shoot()) {
                                 UIManager.TriggerGameOver();
                                 yield break;
