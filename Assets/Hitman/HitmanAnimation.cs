@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class HitmanAnimation : MonoBehaviour {
 
     [SerializeField] private float walkAnimSpeed, sprintAnimSpeed;
+    [SerializeField] private Transform gunTip;
 
     private Animator animator;
     private Hitman hitman;
@@ -15,7 +16,7 @@ public class HitmanAnimation : MonoBehaviour {
     private readonly string[] animationNames = new[] {
         "Hitman_Running",
         "Hitman_Idle",
-        "Hitman_Aimning",
+        "Hitman_Aiming",
         "Hitman_Shooting",
     };
 
@@ -37,9 +38,16 @@ public class HitmanAnimation : MonoBehaviour {
 
     /// <summary> Call this to enter and exit the aiming animation state. </summary>
     /// <param name="aiming"> if true, enters aiming. if false, exits aiming. </param>
-    public void AimGun(bool aiming) {
-        currentAnimation = aiming ? Animation.aiming : Animation.idle;
-        Play(currentAnimation);
+    public void AimGun(bool aiming, Vector2 target) {
+
+        var newAnimation = aiming ? Animation.aiming : Animation.idle;
+        if (newAnimation != currentAnimation) {
+            currentAnimation = newAnimation;
+            Play(currentAnimation);
+        }
+
+        transform.right = target - (Vector2)(transform.position + gunTip.up * gunTip.localPosition.y);
+        Debug.DrawLine(gunTip.position, target, Color.red);
     }
 
     /// <summary> Plays the shooting animation, then returns to aiming</summary>

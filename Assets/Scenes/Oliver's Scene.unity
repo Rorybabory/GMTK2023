@@ -353,6 +353,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hitman
       objectReference: {fileID: 0}
+    - target: {fileID: 5885008622413572379, guid: 03732aa9c1fd13f45a75c5784fc2520a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03732aa9c1fd13f45a75c5784fc2520a, type: 3}
 --- !u!1001 &1460786311
