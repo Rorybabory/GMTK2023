@@ -17,15 +17,24 @@ public class SuspicionManager : MonoBehaviour
     public float evaporation = 0.01f;
     public bool percentageEvaporation = false;
 
+    [Tooltip("How much above average (in percent) suspicion has to be in order to prioritize it.")]
+    public float SignificanceThreshold = 0.2f;
+
     [Header("Gizmos")]
     public bool DrawSusMap = false;
     public Color GizmoSusColor = Color.black;
+    public Color GizmoSigColor = Color.magenta;
     public float GizmoOpacityMultiplier = 0.5f;
 
     /// <summary>
     /// Map of the suspicion of each cell, null is an empty cell.
     /// </summary>
     public float?[,] SusMap;
+    [Tooltip("List of cell coordinates that are above the Significance threshold.")]
+    public List<Vector2Int> SigPoints;
+
+    [Header("Readonly")]
+    public float Average = 0;
 
     private void Awake()
     {
@@ -59,6 +68,8 @@ public class SuspicionManager : MonoBehaviour
     private void FixedUpdate()
     {
         ComputeTick();
+        CalculateAverage();
+        CalculateSignificantCells();
     }
 
     public void ComputeTick()
@@ -109,6 +120,44 @@ public class SuspicionManager : MonoBehaviour
         }
     }
 
+    public void CalculateAverage()
+    {
+        int count = 0;
+        float amount = 0;
+        for (int y = SusMap.GetLength(1) - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < SusMap.GetLength(0); x++)
+            {
+                if (SusMap[x, y] != null)
+                {
+                    amount += SusMap[x, y].Value;
+                    count++;
+                }
+            }
+        }
+
+        amount /= count;
+        Average = amount;
+    }
+
+    public void CalculateSignificantCells()
+    {
+        SigPoints = new();
+        for (int y = SusMap.GetLength(1) - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < SusMap.GetLength(0); x++)
+            {
+                if (SusMap[x, y] != null)
+                {
+                    if (SusMap[x, y] > Average * (1 + SignificanceThreshold)) //if the cell is significant
+                    {
+                        SigPoints.Add(new(x, y));
+                    }
+                }
+            }
+        }
+    }
+
     bool CheckCell(int x, int y)
     {
         if (x < 0 || y < 0) return false;
@@ -153,7 +202,15 @@ public class SuspicionManager : MonoBehaviour
             {
                 if (SusMap[x, y] != null)
                 {
-                    Gizmos.color = new(GizmoSusColor.r, GizmoSusColor.g, GizmoSusColor.b, SusMap[x, y].Value * GizmoOpacityMultiplier);
+                    if (SigPoints.Contains(new(x, y)))
+                    {
+                        Gizmos.color = new(GizmoSigColor.r, GizmoSigColor.g, GizmoSigColor.b, SusMap[x, y].Value * GizmoOpacityMultiplier);
+                    }
+                    else
+                    {
+                        Gizmos.color = new(GizmoSusColor.r, GizmoSusColor.g, GizmoSusColor.b, SusMap[x, y].Value * GizmoOpacityMultiplier);
+                    }
+
                     Gizmos.DrawCube(new Vector3(x + 0.5f, y + 0.5f) + SearchAreas.localBounds.min, Vector2.one);
                 }
             }

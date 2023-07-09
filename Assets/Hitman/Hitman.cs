@@ -39,7 +39,6 @@ public class Hitman : MonoBehaviour
     public float MinPheromoneLevel = 0.15f;
     [SerializeField] public SoundEffect shoot;
 
-
     [Header("Readonly Stuff")]
 
     [HideInInspector] public NavMeshAgent Agent;

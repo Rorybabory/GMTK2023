@@ -84,6 +84,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   ObscurityDampening: 0.5
-  Suspicion: 1
-  SuspicionAmount: 2.83
+  Suspicion: 0
+  SuspicionAmount: 0.1
   strength: 0

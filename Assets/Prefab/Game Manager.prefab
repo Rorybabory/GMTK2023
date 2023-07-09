@@ -605,7 +605,6 @@ MonoBehaviour:
   Player: {fileID: 0}
   Pheromones: []
   FootstepPheromone: {fileID: 4469000438530472423, guid: 6630ed022822de34ea83b41fa0775576, type: 3}
-  PlayerTrailPheromone: {fileID: 4469000438530472423, guid: 260a468f712594d4784492749c332567, type: 3}
   ExitChasePheromones: {fileID: 12358578102962639, guid: 09d6df3c5cb62dc4bb5d038d06044407, type: 3}
 --- !u!114 &4866979651115466170
 MonoBehaviour:
@@ -620,9 +619,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SearchAreas: {fileID: 0}
-  diffuse: 0.478
-  evaporation: 0.026
+  diffuse: 0.85
+  evaporation: 0.025
   percentageEvaporation: 1
   DrawSusMap: 1
   GizmoSusColor: {r: 0, g: 0, b: 0, a: 1}
-  GizmoOpacityMultiplier: 0.5
+  GizmoOpacityMultiplier: 0.2
+  Average: 0
