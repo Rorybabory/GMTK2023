@@ -38,7 +38,6 @@ public class Hitman : MonoBehaviour
     [Tooltip("Lowest strength for a pheromone to be attractive")]
     public float MinPheromoneLevel = 0.15f;
 
-
     [Header("Readonly Stuff")]
 
     [HideInInspector] public NavMeshAgent Agent;

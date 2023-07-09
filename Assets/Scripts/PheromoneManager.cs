@@ -11,7 +11,6 @@ public class PheromoneManager : MonoBehaviour
     public List<Pheromone> Pheromones = new();
 
     public Pheromone FootstepPheromone;
-    public Pheromone PlayerTrailPheromone;
     public Pheromone ExitChasePheromones;
 
     void Awake()
@@ -22,10 +21,6 @@ public class PheromoneManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!Player.isHidden)
-        {
-            CreatePheromone(Player.transform.position, PlayerTrailPheromone);
-        }
         
     }
 

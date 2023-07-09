@@ -71,4 +71,10 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   Duration: 0.5
+  BlockingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  ObscurityDampening: 0.5
+  Suspicion: 1
+  SuspicionAmount: 10
   strength: 0
