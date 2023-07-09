@@ -274,6 +274,19 @@ public class ChaseState : State
             return;
         }
 
+        PlayerMechanics pm = hitman.Target.gameObject.GetComponent<PlayerMechanics>();
+        if (pm != null)
+        {
+            if (pm.isHidden)
+            {
+                hitman.SM.SetCurrentState(HitmanStates.Search);
+                return;
+            }
+        }else
+        {
+            Debug.Log("player mechanics not found");
+        }
+
         if (Vector2.Distance(hitman.transform.position, hitman.Target.transform.position) <= hitman.ShootRange)
         {
             hitman.SM.SetCurrentState(HitmanStates.Shoot);

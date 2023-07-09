@@ -76,7 +76,6 @@ public class Pickup : MonoBehaviour
     }
     void OnTriggerStay2D(Collider2D other)
     {
-
         if (mousepressed == true && mousereset == true)
         {
             if (other.transform.parent.gameObject.tag == "Pickup")
@@ -93,6 +92,7 @@ public class Pickup : MonoBehaviour
                 pickup.Play();
             }else if (other.transform.parent.gameObject.tag == "Interactable")
             {
+                mousereset = false;
                 Interact interact = other.transform.parent.gameObject.GetComponent<Interact>();
                 if (interact == null) {
                     Debug.Log("Interact not found\n");
@@ -100,7 +100,7 @@ public class Pickup : MonoBehaviour
 
                 }
                 interact.Used(this.gameObject);
-                mousereset = false;
+                
             }
             
         }

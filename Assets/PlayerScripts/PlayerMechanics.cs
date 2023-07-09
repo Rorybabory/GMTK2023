@@ -56,7 +56,7 @@ public class PlayerMechanics : MonoBehaviour
 
     private void Update()
     {
-
+        if (isHidden) { return; }
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
         rb.velocity = input * moveSpeed;

@@ -32,6 +32,16 @@ public class ShootState : State
 
     public override void Update()
     {
+        PlayerMechanics pm = hitman.Target.gameObject.GetComponent<PlayerMechanics>();
+
+        if (pm != null)
+        {
+            if (pm.isHidden)
+            {
+                hitman.SM.SetCurrentState(HitmanStates.Search);
+                return;
+            }
+        }
         bool outOfRange = Vector2.Distance(hitman.transform.position, hitman.Target.transform.position) > hitman.ShootRange,
              outOfSight = !hitman.HasLOS;
 

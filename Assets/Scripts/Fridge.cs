@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Fridge : Interact
 {
+    private bool insideFridge = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,10 @@ public class Fridge : Interact
 
     public override void Used(GameObject player)
     {
-        Debug.Log("USED FRIDGE");
+        
+        insideFridge = !insideFridge;
+        Debug.Log("Inside Fridge: " + insideFridge);
+        player.GetComponent<PlayerMechanics>().isHidden = insideFridge;
+        player.GetComponent<Renderer>().enabled = !insideFridge;
     }
 }
