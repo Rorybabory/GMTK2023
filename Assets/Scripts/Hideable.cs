@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fridge : Interact
+public class Hideable : Interact
 {
     private bool insideFridge = false;
     // Start is called before the first frame update
