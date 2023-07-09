@@ -31,7 +31,7 @@ public class MainMenuManager : MonoBehaviour {
 
     private static int levelsCompleted;
 
-    private State state = State.main;
+    private static State state = State.main;
     private Vector2 position, start, end;
 
     public static void Load(bool completed) {
@@ -43,6 +43,7 @@ public class MainMenuManager : MonoBehaviour {
         }
 
         SceneManager.LoadScene(mainMenuScene);
+        state = State.levelSelect;
     }
 
     private void Awake() {
