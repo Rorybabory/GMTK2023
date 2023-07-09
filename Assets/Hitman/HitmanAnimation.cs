@@ -36,18 +36,22 @@ public class HitmanAnimation : MonoBehaviour {
         animator.Play(animationNames[(int)animation]);
     }
 
-    /// <summary> Call this to enter and exit the aiming animation state. </summary>
-    /// <param name="aiming"> if true, enters aiming. if false, exits aiming. </param>
-    public void AimGun(bool aiming, Vector2 target) {
+    private void UpdateAnimation(Animation newAnimation) {
+        if (currentAnimation == newAnimation) return;
 
-        var newAnimation = aiming ? Animation.aiming : Animation.idle;
-        if (newAnimation != currentAnimation) {
-            currentAnimation = newAnimation;
-            Play(currentAnimation);
-        }
+        currentAnimation = newAnimation;
+        Play(currentAnimation);
+    }
+
+    public void AimGun(Vector2 target) {
+
+        UpdateAnimation(Animation.aiming);
 
         transform.right = target - (Vector2)(transform.position + gunTip.up * gunTip.localPosition.y);
-        Debug.DrawLine(gunTip.position, target, Color.red);
+    }
+
+    public void StopAiming() {
+        UpdateAnimation(Animation.idle);
     }
 
     /// <summary> Plays the shooting animation, then returns to aiming</summary>
@@ -66,12 +70,8 @@ public class HitmanAnimation : MonoBehaviour {
             transform.eulerAngles = Vector3.forward * Mathf.Round(Vector2.SignedAngle(Vector2.right, agent.velocity) * 90f) / 90f;
         }
 
-        Animation newAnimation = moving ? Animation.running : Animation.idle;
-
-        if (newAnimation != currentAnimation) {
-            currentAnimation = newAnimation;
-            Play(currentAnimation);
-        }
+        var newAnimation = moving ? Animation.running : Animation.idle;
+        UpdateAnimation(newAnimation);
 
         animator.speed = speed >= hitman.SprintSpeed ? sprintAnimSpeed : walkAnimSpeed;
     }

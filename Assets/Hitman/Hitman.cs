@@ -32,6 +32,8 @@ public class Hitman : MonoBehaviour
     public float TurnLerp = 4;
 
     public float ShootRange = 8;
+    public float FirstShotWaitTime = 2;
+    public float FireRate = 1;
 
     [Tooltip("Lowest strength for a pheromone to be attractive")]
     public float MinPheromoneLevel = 0.15f;
