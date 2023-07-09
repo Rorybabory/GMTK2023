@@ -55,8 +55,9 @@ public class HitmanAnimation : MonoBehaviour {
     }
 
     /// <summary> Plays the shooting animation, then returns to aiming</summary>
-    public void Shoot() {
+    public bool Shoot() {
         Play(Animation.shooting);
+        return Physics2D.Raycast(gunTip.position, gunTip.right);
     }
 
     private void Update() {

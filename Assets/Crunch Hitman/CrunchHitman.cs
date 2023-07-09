@@ -15,13 +15,18 @@ public class CrunchHitman : MonoBehaviour {
     [SerializeField] private int pickNewPatrolCount;
     [SerializeField] private float roomPatrolDist, newPatrolWaitTime, patrolSpeed;
 
+    [Header("Attacking")]
+    [SerializeField] private float firstShotWaitTime;
+    [SerializeField] private float fireRate;
+
+    private Transform player;
+    private NavMeshAgent agent;
+    private HitmanAnimation anim;
+
     private const float waitForAgentDestinationUpdate = 0.1f;
 
     private Vector2 distToPlayer;
     private bool visible;
-
-    private Transform player;
-    private NavMeshAgent agent;
     private List<GameObject> rooms;
 
     private GameObject currentRoom;
@@ -30,18 +35,18 @@ public class CrunchHitman : MonoBehaviour {
     // state stuff
     private enum State { headingToRoom, patrollingRoom, chasing, attacking }
     private void ChangeState(State newState) {
-        stateDur = 0f;
         prevState = state;
         state = newState;
     }
     private State state, prevState;
-    private float stateDur;
 
     private bool reachedTarget => agent.remainingDistance < 0.1f;
 
     private void Awake() {
 
         agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<HitmanAnimation>();
+
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -59,7 +64,6 @@ public class CrunchHitman : MonoBehaviour {
 
         while (true) {
 
-            stateDur = 0f;
             switch (state) {
 
                 case State.headingToRoom:
@@ -84,16 +88,14 @@ public class CrunchHitman : MonoBehaviour {
 
                     currentRoom = close;
 
+                    float timer = 0;
                     while (state == State.headingToRoom) {
-                        stateDur += Time.deltaTime;
+                        timer += Time.deltaTime;
 
                         agent.SetDestination(currentRoom.transform.position);
 
-                        if (stateDur > waitForAgentDestinationUpdate && reachedTarget) {
+                        if (timer > waitForAgentDestinationUpdate && reachedTarget)
                             ChangeState(State.patrollingRoom);
-                            //uncheckedRooms.Remove(currentRoom);
-                            //ChangeState(State.headingToRoom);
-                        }
                         yield return null;
                     }
 
@@ -117,7 +119,10 @@ public class CrunchHitman : MonoBehaviour {
                         }
 
                         newPatrols--;
-                        if (newPatrols == 0) ChangeState(State.headingToRoom);
+                        if (newPatrols == 0) {
+                            yield return new WaitForSeconds(newPatrolWaitTime);
+                            ChangeState(State.headingToRoom);
+                        }
                     }
 
                     break;
@@ -125,12 +130,33 @@ public class CrunchHitman : MonoBehaviour {
                 case State.chasing:
 
                     while (state == State.chasing) {
-                        stateDur += Time.deltaTime;
 
                         agent.SetDestination(player.position);
 
                         if (!visible) ChangeState(State.headingToRoom);
                         yield return null;
+                    }
+
+                    break;
+
+                case State.attacking:
+
+                    bool firstShotTaken = false;
+
+                    while (state == State.attacking) {
+                        agent.enabled = false;
+
+                        timer = firstShotTaken ? firstShotWaitTime : fireRate;
+                        while (state == State.attacking) {
+                            timer -= Time.deltaTime;
+                            anim.AimGun(player.position);
+
+                            if (timer < 0) break;
+                            else if (!visible) ChangeState(State.chasing);
+                            yield return null;
+                        }
+
+                        if (anim.Shoot()) print("you died");
                     }
 
                     break;
@@ -149,9 +175,14 @@ public class CrunchHitman : MonoBehaviour {
             Vector2.Angle(transform.right, distToPlayer) < fieldOfViewAngle / 2
             && Physics2D.Raycast(transform.position, distToPlayer, maxViewDist).collider.gameObject.CompareTag("Player");
 
-        if (visible) ChangeState(State.chasing);
+        if (visible) {
+            StopCoroutine(UpdateCoroutine());
+            ChangeState(State.attacking);
+            StartCoroutine(UpdateCoroutine());
+        }
 
-        transform.eulerAngles = Vector3.forward * Vector2.SignedAngle(Vector2.right, agent.destination - transform.position);
+        if (!(agent.destination.x == Mathf.Infinity || agent.destination.y == Mathf.Infinity))
+            transform.eulerAngles = Vector3.forward * Vector2.SignedAngle(Vector2.right, agent.destination - transform.position);
         Debug.DrawLine(transform.position, agent.destination, Color.green);
     }
 
