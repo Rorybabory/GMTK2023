@@ -229,6 +229,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 28096102, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 28096103, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 28096103, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 28096103, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 28096103, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 527010238, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4866979651115466113, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
       propertyPath: m_Name
       value: Game Manager
