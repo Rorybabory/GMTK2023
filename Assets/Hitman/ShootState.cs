@@ -8,6 +8,13 @@ using StateMachine;
 /// </summary>
 public class ShootState : State
 {
+    protected Hitman hitman;
+
+    public ShootState(Hitman hitman)
+    {
+        this.hitman = hitman;
+    }
+
     public override void Enter()
     {
         Debug.Log("Enter Shoot State");

@@ -61,7 +61,6 @@ public class Hitman : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         Agent = gameObject.GetComponent<NavMeshAgent>();
         Agent.updateRotation = false;
         Agent.updateUpAxis = false;
@@ -70,6 +69,7 @@ public class Hitman : MonoBehaviour
         SM.AddState(HitmanStates.Roam, new RoamState(this));
         SM.AddState(HitmanStates.Search, new SearchState(this));
         SM.AddState(HitmanStates.Chase, new ChaseState(this));
+        SM.AddState(HitmanStates.Shoot, new ShootState(this));
 
         SM.SetCurrentState(HitmanStates.Chase);
     }
