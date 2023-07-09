@@ -1406,7 +1406,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1deb758955cdfb04cb484348067c219e, type: 3}
-<<<<<<< Updated upstream
 --- !u!1 &913131307
 GameObject:
   m_ObjectHideFlags: 0
@@ -1521,8 +1520,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
-=======
->>>>>>> Stashed changes
 --- !u!4 &1125556309 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4866979651115466118, guid: 88cd98b8f67f1fa4294c5bd08e59b567, type: 3}
