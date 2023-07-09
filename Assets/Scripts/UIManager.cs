@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    static bool gameend = false;
+    bool gameend = false;
+    static UIManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     public static void TriggerGameOver()
     {
         Canvas gameover = GameObject.Find("GameOver").GetComponent<Canvas>();
@@ -12,13 +19,13 @@ public class UIManager : MonoBehaviour
         if (gameover.enabled == false)
         {
             gameover.enabled = true;
-            gameend = true;
+            instance.gameend = true;
             Time.timeScale = 0;
         }
     }
     public static bool getGameEnd()
     {
-        return gameend;
+        return instance.gameend;
     }
     public static void TriggerWinScreen()
     {

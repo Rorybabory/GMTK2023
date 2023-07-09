@@ -45,6 +45,8 @@ public class PlayerAnimation : MonoBehaviour {
         {
             Debug.Log("Dead sprite");
             sprender.sprite = deadSprite;
+            animator.enabled = false;
+            return;
         }
         float speed = rb.velocity.magnitude;
         bool moving = speed > 0.1f;
