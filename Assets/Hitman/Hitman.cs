@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +20,8 @@ public enum HitmanStates
 public class Hitman : MonoBehaviour
 {
     public static Hitman Instance;
+
+    public HitmanStates state;
 
     public Transform Target;
     public float FOV = 180;
@@ -172,8 +173,9 @@ public class InvestigateState : State
 
     public override void Enter()
     {
-        Debug.Log("Entered Roaming State");
-        hitman.Agent.isStopped = true;
+        Debug.Log("Entered Investigate State");
+        hitman.state = HitmanStates.Investigate;
+        hitman.Agent.SetDestination(hitman.transform.position);
     }
 
     public override void Update()
@@ -201,7 +203,11 @@ public class InvestigateState : State
         //Pick another sus point
         //Repeat until state change
 
-
+        if (Vector2.Distance(hitman.transform.position, hitman.Agent.destination) < 1)
+        {
+            var CellCoordinate = SuspicionManager.Instance.SigPoints[Random.Range(0, SuspicionManager.Instance.SigPoints.Count - 1)];
+            hitman.Agent.destination = SuspicionManager.Instance.SusMapToWorld(CellCoordinate.x, CellCoordinate.y); //set the destination in world space
+        }
     }
 
     public override void FixedUpdate()
@@ -211,7 +217,7 @@ public class InvestigateState : State
 
     public override void Exit()
     {
-        Debug.Log("Exited Roaming State");
+        Debug.Log("Exited Investigate State");
     }
 }
 
@@ -228,7 +234,7 @@ public class SearchState : State
     {
         Debug.Log("Entered Search State");
         hitman.Agent.isStopped = false;
-        //hitman.Agent.SetDestination(hitman.LastPlayerPos); //move to the last known position
+        hitman.state = HitmanStates.Search;
     }
 
     public override void Update()
@@ -272,6 +278,7 @@ public class ChaseState : State
     {
         Debug.Log("Entered Chase State");
         hitman.Agent.isStopped = false;
+        hitman.state = HitmanStates.Chase;
     }
 
     public override void Update()
@@ -290,7 +297,8 @@ public class ChaseState : State
                 hitman.SM.SetCurrentState(HitmanStates.Investigate);
                 return;
             }
-        }else
+        }
+        else
         {
             Debug.Log("player mechanics not found");
         }

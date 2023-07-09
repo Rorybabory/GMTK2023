@@ -22,6 +22,7 @@ public class ShootState : State
     public override void Enter()
     {
         Debug.Log("Enter Shoot State");
+        hitman.state = HitmanStates.Shoot;
 
         if (animation == null) animation = hitman.GetComponent<HitmanAnimation>();
         shootTimer = 0f;

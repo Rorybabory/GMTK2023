@@ -171,8 +171,12 @@ public class SuspicionManager : MonoBehaviour
         var tilemapPos = SearchAreas.WorldToCell(position);
         Vector2Int value = (Vector2Int)tilemapPos - new Vector2Int((int)SearchAreas.localBounds.min.x, (int)SearchAreas.localBounds.min.y); //new Vector2Int((int)Mathf.Round(position.x + SearchAreas.localBounds.extents.x), (int)Mathf.Round(position.y + SearchAreas.localBounds.extents.y - 0.5f)) - (Vector2Int)SearchAreas.origin;
 
-        Debug.Log($"Position: {position}, Converted: {value}");
         return value;
+    }
+
+    public Vector2 SusMapToWorld(int x, int y)
+    {
+        return SearchAreas.CellToWorld(new Vector3Int(x, y) + new Vector3Int((int)SearchAreas.localBounds.min.x, (int)SearchAreas.localBounds.min.y));
     }
 
     public void AddSus(int x, int y, float amount)
