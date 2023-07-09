@@ -2751,12 +2751,6 @@ MonoBehaviour:
     sceneName: Level1
   - displayName: Level 3 - Open Space
     sceneName: Level2
-  - displayName: Level 1 - Sussy Baka
-    sceneName: bruh moment
-  - displayName: Level 1 - Sussy Baka
-    sceneName: bruh moment
-  - displayName: Level 1 - Sussy Baka
-    sceneName: bruh moment
   levelSelectParent: {fileID: 228177536}
   levelSelectButtonPrefab: {fileID: 6856761192039023489, guid: f5a91c525df8d4ceab744351453092ff, type: 3}
 --- !u!114 &1557017268
