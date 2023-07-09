@@ -69,10 +69,8 @@ public class PlayerMechanics : MonoBehaviour
         if (Input.GetKeyDown(PushbackKey))
         {
             PushBack();
-        }
-        
+        }        
     }
-
 
     void SetSprint(bool bStartSprint)
     {
@@ -86,9 +84,10 @@ public class PlayerMechanics : MonoBehaviour
             moveSpeed = walkSpeed;
         }
     }
+
     private void FixedUpdate()
     {
-        PheromoneManager.CreatePheromone(rb.transform.position, PlayerTrailPheromone);
+        if(!isHidden) PheromoneManager.CreatePheromone(rb.transform.position, PlayerTrailPheromone);
     }
 
     void PushBack()

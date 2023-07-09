@@ -191,6 +191,13 @@ public class InvestigateState : State
 
         //determine what is considered suspicious enough to check out
 
+        //Pick a random point that is x% above average sus
+        //Move to that point
+        //Decrease sus level when near
+        //Pick another sus point
+        //Repeat until state change
+
+
 
     }
 
