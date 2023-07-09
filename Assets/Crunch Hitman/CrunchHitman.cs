@@ -156,7 +156,10 @@ public class CrunchHitman : MonoBehaviour {
                             yield return null;
                         }
 
-                        if (anim.Shoot()) print("you died");
+                        if (anim.Shoot()) {
+                            print("you died");
+                            UIManager.TriggerGameOver();
+                        }
                     }
 
                     break;
