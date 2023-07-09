@@ -279,7 +279,7 @@ public class ChaseState : State
         {
             if (pm.isHidden)
             {
-                hitman.SM.SetCurrentState(HitmanStates.Search);
+                hitman.SM.SetCurrentState(HitmanStates.Investigate);
                 return;
             }
         }else
