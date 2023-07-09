@@ -2745,12 +2745,12 @@ MonoBehaviour:
     timer: 0
   menuPosition: {fileID: 489243396}
   levels:
-  - displayName: Level 1 - Test Level
+  - displayName: Level 1 - Tutorial
+    sceneName: Level 0
+  - displayName: Level 2 - The Quadrants
     sceneName: Level1
-  - displayName: Level 1 - Sussy Baka
-    sceneName: bruh moment
-  - displayName: Level 1 - Sussy Baka
-    sceneName: bruh moment
+  - displayName: Level 3 - Open Space
+    sceneName: Level2
   - displayName: Level 1 - Sussy Baka
     sceneName: bruh moment
   - displayName: Level 1 - Sussy Baka
