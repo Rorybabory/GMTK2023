@@ -18,9 +18,14 @@ public class PlayerMechanics : MonoBehaviour
     [SerializeField] private float walkSpeed = 2;
     [SerializeField] private float sprintSpeed = 5;
     [SerializeField] private float pushbackStrength = 10;
-    [SerializeField] private float pushbackDuration = 1.5f;
+    [SerializeField] private float pushbackDuration = 0.7f;
     [SerializeField] private KeyCode PushbackKey;
     [SerializeField] private KeyCode SprintKey;
+    [SerializeField] private float pushbackRadius = 2;
+    [SerializeField] private float pushbackCooldown = 3;
+    
+    public PheromoneManager PheromoneManager;
+    public Pheromone PlayerTrailPheromone;
 
     public bool isHidden = true;
 
@@ -32,9 +37,16 @@ public class PlayerMechanics : MonoBehaviour
     private NavMeshAgent navmesh;
     private Rigidbody2D hitmanRb;
     private Vector2 prevDirection;
+    private bool bCanPushBack = true;
+    
     void ToggleHide() 
     {
         bIsHiding = !bIsHiding;
+    }
+
+    bool ShouldCreatePheromone()
+    {
+        return !bIsHiding && rb.velocity.magnitude > 0;
     }
 
     private void Awake()
@@ -74,10 +86,18 @@ public class PlayerMechanics : MonoBehaviour
             moveSpeed = walkSpeed;
         }
     }
+    private void FixedUpdate()
+    {
+        PheromoneManager.CreatePheromone(rb.transform.position, PlayerTrailPheromone);
+    }
 
     void PushBack()
     {
-        StartCoroutine(PushBackCoRoutine());
+        if ((hitmanRb.position - rb.position).magnitude <= pushbackRadius && bCanPushBack) {
+            StartCoroutine(PushBackCoRoutine());
+            bCanPushBack = false;
+            new WaitForSeconds(pushbackCooldown);
+        }
     }
 
     IEnumerator PushBackCoRoutine()
@@ -90,6 +110,8 @@ public class PlayerMechanics : MonoBehaviour
         hitman.enabled = true;
         navmesh.enabled = true;
         hitmanRb.constraints = RigidbodyConstraints2D.FreezeAll;
+        yield return new WaitForSeconds(pushbackCooldown);
+        bCanPushBack = true;
 
     }
 }

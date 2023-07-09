@@ -9,7 +9,7 @@ using GGUtil;
 
 public enum HitmanStates
 {
-    Roam,
+    Investigate,
     Search,
     Chase,
     Stab,
@@ -66,7 +66,7 @@ public class Hitman : MonoBehaviour
         Agent.updateUpAxis = false;
 
         //initialize the state machine states
-        SM.AddState(HitmanStates.Roam, new RoamState(this));
+        SM.AddState(HitmanStates.Investigate, new InvestigateState(this));
         SM.AddState(HitmanStates.Search, new SearchState(this));
         SM.AddState(HitmanStates.Chase, new ChaseState(this));
         SM.AddState(HitmanStates.Shoot, new ShootState(this));
@@ -155,11 +155,11 @@ public class Hitman : MonoBehaviour
     }
 }
 
-public class RoamState : State
+public class InvestigateState : State
 {
     protected Hitman hitman;
 
-    public RoamState(Hitman hitman)
+    public InvestigateState(Hitman hitman)
     {
         this.hitman = hitman;
     }
@@ -172,11 +172,24 @@ public class RoamState : State
 
     public override void Update()
     {
+        hitman.EvaluatePheromoneAverage();
+        hitman.LookMovementDir();
+
         if (hitman.HasLOS)
         {
             hitman.SM.SetCurrentState(HitmanStates.Chase);
             return;
         }
+
+        if (hitman.AveragePheromoneStrength > hitman.MinPheromoneLevel)
+        {
+            hitman.SM.SetCurrentState(HitmanStates.Search);
+            return;
+        }
+
+        //determine what is considered suspicious enough to check out
+
+
     }
 
     public override void Exit()
@@ -214,7 +227,7 @@ public class SearchState : State
 
         if (hitman.AveragePheromoneStrength < hitman.MinPheromoneLevel)
         {
-            hitman.SM.SetCurrentState(HitmanStates.Roam);
+            hitman.SM.SetCurrentState(HitmanStates.Investigate);
             return;
         }
         else //if the pheromone strength is valid

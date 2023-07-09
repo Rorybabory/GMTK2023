@@ -102,7 +102,6 @@ public class SuspicionManager : MonoBehaviour
                     {
                         SusMap[x, y] -= evaporation;
                     }
-                    
 
                     if (SusMap[x, y] < 0) SusMap[x, y] = 0;
                 }
