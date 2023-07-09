@@ -17,6 +17,7 @@ public class MainMenuManager : MonoBehaviour {
     [SerializeField] private RectTransform levelSelectParent;
     [SerializeField] private GameObject levelSelectButtonPrefab;
 
+    private static List<Level> staticLevels;
     private enum State { main, settings, levelSelect, credits }
 
     private Dictionary<State, Vector2> menuPositions = new() {
@@ -26,12 +27,27 @@ public class MainMenuManager : MonoBehaviour {
         { State.credits, new(0, 900) },
     };
 
+    private static int levelsCompleted;
+
     private State state = State.main;
     private Vector2 position, start, end;
+    
+    public static void Load(bool completed) {
+
+        if (completed) {
+            int index = staticLevels.FindIndex(l => l.sceneName == SceneManager.GetActiveScene().name);
+            if (index != -1 && index + 1 > levelsCompleted)
+                levelsCompleted++;
+        }
+
+        SceneManager.LoadScene("MainMenu");
+    }
 
     private void Awake() {
 
-        foreach (var level in levels) {
+        staticLevels = levels;
+
+        foreach (var level in levels.GetRange(0, levelsCompleted + 1)) {
             var button = Instantiate(levelSelectButtonPrefab, levelSelectParent);
 
             foreach (var textMesh in button.GetComponentsInChildren<TextMeshProUGUI>())
