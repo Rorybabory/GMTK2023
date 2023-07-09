@@ -31,6 +31,8 @@ public class Hitman : MonoBehaviour
     public float SprintSpeed = 5;
     public float TurnLerp = 4;
 
+    public float ShootRange = 8;
+
     [Tooltip("Lowest strength for a pheromone to be attractive")]
     public float MinPheromoneLevel = 0.15f;
 
@@ -247,6 +249,12 @@ public class ChaseState : State
         if (!hitman.HasLOS) //if can't see the player then search for him
         {
             hitman.SM.SetCurrentState(HitmanStates.Search);
+            return;
+        }
+
+        if (Vector2.Distance(hitman.transform.position, hitman.Target.transform.position) <= hitman.ShootRange)
+        {
+            hitman.SM.SetCurrentState(HitmanStates.Shoot);
             return;
         }
 
