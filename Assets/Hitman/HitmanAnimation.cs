@@ -47,7 +47,7 @@ public class HitmanAnimation : MonoBehaviour {
 
         UpdateAnimation(Animation.aiming);
 
-        return Vector2.SignedAngle(Vector2.up, target - (Vector2)(transform.position + gunTip.up * gunTip.localPosition.y));
+        return Vector2.SignedAngle(Vector2.right, target - (Vector2)(transform.position + gunTip.up * gunTip.localPosition.y));
     }
 
     public void StopAiming() {
@@ -57,7 +57,8 @@ public class HitmanAnimation : MonoBehaviour {
     /// <summary> Plays the shooting animation, then returns to aiming</summary>
     public bool Shoot() {
         Play(Animation.shooting);
-        return Physics2D.Raycast(gunTip.position, gunTip.right);
+        var hit = Physics2D.Raycast(gunTip.position, gunTip.right);
+        return hit && hit.collider.gameObject.CompareTag("Player");
     }
 
     private void Update() {

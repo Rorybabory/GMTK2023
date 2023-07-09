@@ -11,14 +11,15 @@ public class CrunchHitman : MonoBehaviour {
 
     [Header("Movement")]
     [SerializeField] private float turnSpeed;
+    [SerializeField] private float aimSpeed;
 
     [Header("Patrolling")]
     [SerializeField] private int pickNewPatrolCount;
     [SerializeField] private float roomPatrolDist, newPatrolWaitTime, patrolSpeed;
 
     [Header("Attacking")]
-    [SerializeField] private float firstShotWaitTime;
     [SerializeField] private float fireRate;
+    [SerializeField] private float shootDelay;
 
     private Transform player;
     private PlayerMechanics playerInfo;
@@ -66,6 +67,8 @@ public class CrunchHitman : MonoBehaviour {
     }
 
     private IEnumerator UpdateCoroutine() {
+
+        print("update started");
 
         while (true) {
 
@@ -146,25 +149,30 @@ public class CrunchHitman : MonoBehaviour {
 
                 case State.attacking:
 
-                    bool firstShotTaken = false;
                     agent.enabled = false;
+
+                    while (!anim.Shoot()) {
+                        aimAngle = anim.AimGun(player.position);
+                        yield return null;
+                    }
+
+                    yield return new WaitForSeconds(shootDelay);
 
                     while (state == State.attacking) {
 
-                        timer = firstShotTaken ? firstShotWaitTime : fireRate;
-                        while (state == State.attacking) {
-                            timer -= Time.deltaTime;
-                            aimAngle = anim.AimGun(player.position);
-
-                            if (timer < 0) break;
-                            else if (!visible) ChangeState(State.chasing);
-                            yield return null;
-                        }
-
                         if (anim.Shoot()) {
-                            print("you died");
                             UIManager.TriggerGameOver();
                             yield break;
+                        }
+
+                        timer = 0;
+                        while (state == State.attacking) {
+                            timer += Time.deltaTime;
+                            aimAngle = anim.AimGun(player.position);
+
+                            if (timer > fireRate) break;
+                            else if (!visible) ChangeState(State.chasing);
+                            yield return null;
                         }
                     }
 
@@ -192,12 +200,13 @@ public class CrunchHitman : MonoBehaviour {
             StartCoroutine(UpdateCoroutine());
         }
 
-        if (!(agent.destination.x == Mathf.Infinity || agent.destination.y == Mathf.Infinity)) {
+        if (!(agent.destination.x == Mathf.Infinity || agent.destination.y == Mathf.Infinity) || state == State.attacking) {
 
             float target = state == State.attacking ? aimAngle : Vector2.SignedAngle(Vector2.right, agent.destination - transform.position),
                   angle = transform.eulerAngles.z,
                   delta = Mathf.DeltaAngle(angle, target),
-                  vel = Mathf.Sign(delta) * turnSpeed * Time.deltaTime;
+                  speed = state == State.attacking ? aimSpeed : turnSpeed,
+                  vel = Mathf.Sign(delta) * speed * Time.deltaTime;
 
             if (Mathf.Abs(vel) > Mathf.Abs(delta)) vel = Mathf.Clamp(vel, -delta, delta);
 
