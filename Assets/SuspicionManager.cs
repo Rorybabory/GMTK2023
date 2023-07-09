@@ -70,8 +70,14 @@ public class SuspicionManager : MonoBehaviour
                 if (SusMap[x, y] != null)
                 {
                     //step one is to diffuse to neighbors
-                    //calculate diffuse amount
-                    float amnt = SusMap[x, y].Value * diffuse / 4;
+                    //calculate diffuse amount based on the number of neighbors it has
+                    int adjacent = 0;
+                    if (CheckCell(x, y + 1)) adjacent++;
+                    if (CheckCell(x, y - 1)) adjacent++;
+                    if (CheckCell(x + 1, y)) adjacent++;
+                    if (CheckCell(x - 1, y)) adjacent++;
+
+                    float amnt = SusMap[x, y].Value * diffuse / adjacent;
 
                     void DoDiffuse(int _x, int _y) //diffuse the value to another cell relative to this one.
                     {
@@ -86,7 +92,7 @@ public class SuspicionManager : MonoBehaviour
                     DoDiffuse(-1, 0);
                     DoDiffuse(0, 1);
                     DoDiffuse(0, -1);
-                    
+
                     //Step two is to evaporate
                     if (percentageEvaporation)
                     {
@@ -136,10 +142,10 @@ public class SuspicionManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        DrawGridGizmo();
+        DrawSusMapGizmo();
     }
 
-    private void DrawGridGizmo()
+    private void DrawSusMapGizmo()
     {
         if (!Application.isPlaying || !DrawSusMap) return;
         for (int y = SusMap.GetLength(1) - 1; y >= 0; y--)

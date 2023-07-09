@@ -23,11 +23,11 @@ public class Flashlight : MonoBehaviour
         }
         else
         {
-            lightComp.intensity = 2.5f;
+            lightComp.intensity = 6.5f;
             Vector3 mpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             Vector3 dir = (new Vector2(mpos.x, mpos.y) - new Vector2(this.transform.position.x, this.transform.position.y));
-            transform.right = new Vector3(dir.y, -dir.x, 0.0f);
+            transform.right = dir;
 
         }
     }

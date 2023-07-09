@@ -101,7 +101,7 @@ public class Hitman : MonoBehaviour
     /// <returns></returns>
     public bool CheckLOS()
     {        
-        if (Vector2.Angle(transform.up, PlayerDir) <= FOV / 2)
+        if (Vector2.Angle(transform.right, PlayerDir) <= FOV / 2)
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, PlayerDir, ViewDistance, SightMask);
             if (hit.transform == Target) return true;
@@ -112,7 +112,7 @@ public class Hitman : MonoBehaviour
 
     public void LookAtPosition(Vector2 Position)
     {
-        Quaternion rot = GGMath.LookRotation2D(transform.position, (Vector2)transform.position - (Position - (Vector2)transform.position).normalized, 90); //desired rotation
+        Quaternion rot = GGMath.LookRotation2D(transform.position, Position, 0); //desired rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, rot, TurnLerp * Time.deltaTime);
     }
     

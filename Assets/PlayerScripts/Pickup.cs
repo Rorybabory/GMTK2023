@@ -42,7 +42,6 @@ public class Pickup : MonoBehaviour
                 held.GetComponent<Collider2D>().enabled = true;
                 held.transform.GetChild(0).GetComponent<Collider2D>().enabled = true;
                 held.transform.position = this.transform.position + new Vector3(dir.x, dir.y, 0.0f);
-                held.transform.localScale = held.transform.localScale * 1.25f;
                 held.gameObject.GetComponent<Rigidbody2D>().velocity = dir * dist * tossScale;
                 
                 held = null;
@@ -60,7 +59,6 @@ public class Pickup : MonoBehaviour
                 held.GetComponent<Collider2D>().enabled = true;
                 held.transform.GetChild(0).GetComponent<Collider2D>().enabled = true;
                 held.transform.position = this.transform.position + new Vector3(dir.x, dir.y, 0.0f);
-                held.transform.localScale = held.transform.localScale * 1.25f;
                 held = null;
                 mousereset = false;
                 source.clip = drop;
