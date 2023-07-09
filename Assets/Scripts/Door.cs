@@ -6,6 +6,7 @@ public class Door : Interact
 {
     private bool open = false;
     [SerializeField] private bool locked = false;
+    [SerializeField] private Transform pivot;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,12 +28,10 @@ public class Door : Interact
         
         if (open)
         {
-            this.transform.position += new Vector3(-0.5f, 1f, 0);
-            this.transform.Rotate(new Vector3(0, 0, 270));
+            this.transform.RotateAround(pivot.position, Vector3.forward, 270);
         }else
         {
-            this.transform.position -= new Vector3(-0.5f, 1f, 0);
-            this.transform.Rotate(new Vector3(0,0,-270));
+            this.transform.RotateAround(pivot.position, Vector3.forward, -270);
         }
     }
 }
